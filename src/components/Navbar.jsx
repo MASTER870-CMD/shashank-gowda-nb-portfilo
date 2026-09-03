@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { label: 'Tech Matrix', hash: '/matrix', isRoute: true },
   { label: 'Engineering Grid', hash: '#projects' },
   { label: 'Archive', hash: '/projects', isRoute: true },
-  { label: 'Contact API', hash: '#contact' },
+  { label: 'Contact API', hash: '/contact', isRoute: true },
 ];
 
 export default function Navbar() {
@@ -131,7 +131,7 @@ export default function Navbar() {
 
           {/* Premium Metallic Gold Ingot Action Button */}
           <Link
-            href={isHomePage ? '#contact' : '/#contact'}
+            href="/contact"
             className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F4D068] to-[#C59B27] text-obsidian-950 font-heading font-bold text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(212,175,55,0.35),inset_0_1px_1px_rgba(255,255,255,0.5)] hover:shadow-[0_0_40px_rgba(212,175,55,0.65)] hover:scale-105 active:scale-95 transition-all duration-300 shrink-0 whitespace-nowrap flex items-center gap-1.5"
           >
             {/* Metallic Gloss Shimmer Sweep */}

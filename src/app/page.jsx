@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import SkillsTeaser from '@/components/SkillsTeaser';
 import ProjectGrid from '@/components/ProjectGrid';
-import ContactAPI from '@/components/ContactAPI';
+import ContactTeaser from '@/components/ContactTeaser';
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -13,7 +13,7 @@ export default function Home() {
         <Hero />
         <SkillsTeaser />
         <ProjectGrid />
-        <ContactAPI />
+        <ContactTeaser />
       </main>
       <Footer />
     </div>
