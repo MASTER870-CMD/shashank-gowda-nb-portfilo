@@ -20,47 +20,12 @@ import ArchitectureModal from './ArchitectureModal';
 
 const FEATURED_PROJECTS = [
   {
-    id: 'voktra-os',
-    title: 'Voktra OS',
-    subtitle: 'Custom Linux Operating System & Low-Level Environment',
-    category: 'Kernel & Systems Engineering',
-    targetTier: 'Enterprise Systems Architecture',
-    delayClass: 'float-delay-0',
-    icon: Terminal,
-    image: '/images/readme.png',
-    fallbackImage: '/images/preview.png',
-    description:
-      'Custom OS built on Xubuntu with highly optimized terminal configurations, custom graphical rules, and low-level system integrations designed for zero-latency kernel performance and security operations.',
-    architecturalSummary:
-      'Voktra OS re-architects standard desktop Linux distributions for high-performance systems engineering. It strips unnecessary background daemons, implements kernel-level sysctl tuning for raw socket performance, and integrates custom XFCE graphical compositor rules with zsh shell optimization. Designed to operate as a hardened sandbox for distributed development and hardware telemetry.',
-    diagram: `[User Interaction Layer]
-        │
-        ├── Custom Zsh Terminal Shell (Pre-configured Low-Latency Aliases)
-        ├── XFCE Custom Compositor (Zero-Tearing, Ultra-Low VRAM Footprint)
-        │
-[Kernel / Hardware Integration Layer]
-        │
-        ├── Linux Kernel Tuning (TCP FastOpen, CFS Scheduler Priorities)
-        ├── Systemd Daemon Stripping (<800MB RAM Idle Footprint)
-        └── Hardware Telemetry Hooks (Direct Syscall Profiling)`,
-    slaMetrics: 'Zero-Lag Shell (<2ms Input Latency) & 780MB Idle RAM',
-    securityLevel: 'Hardened Kernel Sysctl & Least Privilege Profiles',
-    techStack: ['Linux Kernel', 'Xubuntu Base', 'Bash/Zsh Systems Scripting', 'XFCE Compositor', 'Hardware Hooks'],
-    githubUrl: 'https://github.com/MASTER870-CMD',
-    demoUrl: null,
-    metrics: {
-      performance: '65% Less RAM Footprint',
-      latency: '<2ms TTY Shell',
-      architecture: 'Custom Kernel Rules'
-    }
-  },
-  {
     id: 'project-nexus-ai',
     title: 'Project Nexus AI',
     subtitle: 'Autonomous Voice & API Command Orchestration Engine',
     category: 'AI & Distributed Systems',
     targetTier: 'Enterprise AI Infrastructure',
-    delayClass: 'float-delay-1',
+    delayClass: 'float-delay-0',
     icon: Bot,
     image: '/images/neuro_ai.png',
     fallbackImage: '/images/moke_ai.png',
@@ -167,8 +132,8 @@ export default function ProjectGrid() {
           </div>
         </div>
 
-        {/* Featured Projects Grid with Anti-Gravity Staggered Floating */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+        {/* Featured Projects Grid: Centered Balanced 2-Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto items-stretch justify-center">
           {FEATURED_PROJECTS.map((project) => {
             const Icon = project.icon;
             return (

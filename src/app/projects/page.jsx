@@ -38,9 +38,15 @@ export default function ProjectsArchivePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-  // Filter projects based on search query and category toggle
+  // Filter projects based on search query and category toggle, strictly excluding Voktra OS
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
+      if (
+        p.title?.toLowerCase().includes('voktra') ||
+        p.id?.toLowerCase().includes('voktra')
+      ) {
+        return false;
+      }
       const matchCat = matchesCategory(p.category, selectedCategory);
       const q = searchQuery.toLowerCase().trim();
       const matchSearch =

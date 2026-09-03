@@ -147,7 +147,7 @@ export default function Hero() {
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
                   <div className="text-xs">
                     <span className="font-mono text-neutral-400 block text-[9px] uppercase">Kernel Spec</span>
-                    <span className="font-mono text-white font-bold">Voktra OS v2.4</span>
+                    <span className="font-mono text-white font-bold">Linux Kernel v6.8</span>
                   </div>
                 </div>
 
