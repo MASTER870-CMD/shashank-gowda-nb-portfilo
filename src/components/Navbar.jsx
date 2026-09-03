@@ -7,7 +7,7 @@ import { Terminal, Menu, X, ArrowUpRight } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'System Spec', hash: '#hero' },
-  { label: 'Tech Matrix', hash: '#skills' },
+  { label: 'Tech Matrix', hash: '/matrix', isRoute: true },
   { label: 'Engineering Grid', hash: '#projects' },
   { label: 'Archive', hash: '/projects', isRoute: true },
   { label: 'Contact API', hash: '#contact' },

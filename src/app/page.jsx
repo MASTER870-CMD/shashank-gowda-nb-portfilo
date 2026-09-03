@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import SkillsMatrix from '@/components/SkillsMatrix';
+import SkillsTeaser from '@/components/SkillsTeaser';
 import ProjectGrid from '@/components/ProjectGrid';
 import ContactAPI from '@/components/ContactAPI';
 import Footer from '@/components/Footer';
@@ -11,7 +11,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-grow">
         <Hero />
-        <SkillsMatrix />
+        <SkillsTeaser />
         <ProjectGrid />
         <ContactAPI />
       </main>
