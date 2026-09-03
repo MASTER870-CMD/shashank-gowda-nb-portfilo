@@ -142,26 +142,6 @@ export default function Hero() {
                   </div>
                 </div>
 
-                {/* Floating System Spec Satellite Pill 1 */}
-                <div className="floating-card float-delay-2 absolute -top-5 -right-5 px-4 py-2.5 rounded-xl bg-obsidian-900/95 border border-gold/40 shadow-xl backdrop-blur-md flex items-center gap-2.5">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
-                  <div className="text-xs">
-                    <span className="font-mono text-neutral-400 block text-[9px] uppercase">Kernel Spec</span>
-                    <span className="font-mono text-white font-bold">Voktra OS v2.4</span>
-                  </div>
-                </div>
-
-                {/* Floating System Spec Satellite Pill 2 */}
-                <div className="floating-card float-delay-1 absolute -bottom-5 -left-5 px-4 py-2.5 rounded-xl bg-obsidian-900/95 border border-gold/40 shadow-xl backdrop-blur-md flex items-center gap-2.5">
-                  <div className="w-6 h-6 rounded-md bg-gold/10 flex items-center justify-center text-gold">
-                    <Server className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="text-xs">
-                    <span className="font-mono text-neutral-400 block text-[9px] uppercase">Engine</span>
-                    <span className="font-mono text-white font-bold">Node.js + Express API</span>
-                  </div>
-                </div>
-
               </div>
 
             </div>
