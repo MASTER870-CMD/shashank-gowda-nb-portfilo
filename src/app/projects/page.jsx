@@ -1,52 +1,55 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { 
-  Terminal, 
   Search, 
   ExternalLink, 
   Github, 
   ArrowLeft, 
   Calendar, 
-  Layers, 
-  Cpu, 
-  CheckCircle,
   Loader2,
-  Filter
+  Database
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useProjects } from '@/hooks/useProjects';
 
+const CATEGORIES = ['ALL', 'WEB', 'AI', 'TOOLS'];
+
+function matchesCategory(projectCategory, filter) {
+  if (filter === 'ALL') return true;
+  if (!projectCategory) return false;
+  const cat = projectCategory.toUpperCase();
+  if (filter === 'WEB') {
+    return cat.includes('WEB') || cat.includes('APP') || cat.includes('FRONT') || cat.includes('STACK') || cat.includes('HUB');
+  }
+  if (filter === 'AI') {
+    return cat.includes('AI') || cat.includes('VISION') || cat.includes('LEARNING') || cat.includes('NLP') || cat.includes('TENSOR');
+  }
+  if (filter === 'TOOLS') {
+    return cat.includes('TOOL') || cat.includes('SECURITY') || cat.includes('KERNEL') || cat.includes('OS') || cat.includes('SCRIPT') || cat.includes('VAULT');
+  }
+  return cat.includes(filter);
+}
+
 export default function ProjectsArchivePage() {
-  const { projects, loading, error } = useProjects();
+  const { projects, loading } = useProjects();
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
 
-  // Extract unique categories dynamically
-  const categories = useMemo(() => {
-    const set = new Set(['All']);
-    projects.forEach((p) => {
-      if (p.category) set.add(p.category);
-    });
-    return Array.from(set);
-  }, [projects]);
-
-  // Filter projects based on search query and category
+  // Filter projects based on search query and category toggle
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
-      const matchesCategory =
-        selectedCategory === 'All' || p.category === selectedCategory;
+      const matchCat = matchesCategory(p.category, selectedCategory);
       const q = searchQuery.toLowerCase().trim();
-      const matchesSearch =
+      const matchSearch =
         !q ||
         p.title?.toLowerCase().includes(q) ||
         p.desc?.toLowerCase().includes(q) ||
         (Array.isArray(p.tech) && p.tech.some((t) => t.toLowerCase().includes(q)));
 
-      return matchesCategory && matchesSearch;
+      return matchCat && matchSearch;
     });
   }, [projects, searchQuery, selectedCategory]);
 
@@ -54,86 +57,69 @@ export default function ProjectsArchivePage() {
     <div className="min-h-screen bg-obsidian-950 text-white selection:bg-gold selection:text-obsidian-950 flex flex-col justify-between">
       <Navbar />
 
-      <main className="flex-grow pt-32 pb-24 bg-obsidian-950 bg-grid-pattern relative">
-        {/* Subtle Ambient Gold Radiance (Zero purple) */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-radial-gold-glow pointer-events-none -z-10" />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex-grow pt-28 sm:pt-32 pb-24 bg-obsidian-950 relative">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
           
-          {/* Breadcrumb / Back Link */}
+          {/* Dedicated Return to Home Navigation */}
           <div className="mb-8">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/10 text-neutral-300 hover:text-gold hover:border-gold text-xs font-mono uppercase tracking-wider transition-all duration-300 group"
+              className="inline-flex items-center gap-2 text-yellow-500 border border-yellow-500/30 hover:bg-yellow-500/10 px-3.5 sm:px-4 py-2 rounded-md transition-all font-mono text-xs sm:text-sm whitespace-nowrap group"
             >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-              <span>Back to Systems Spec & Home</span>
+              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform shrink-0" />
+              <span>&lt; BACK TO SYSTEMS SPEC &amp; HOME</span>
             </Link>
           </div>
 
-          {/* Archive Header */}
-          <div className="text-left mb-12 border-b border-white/10 pb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gold/10 border border-gold/30 text-xs font-mono text-gold uppercase tracking-widest mb-3">
-              <Terminal className="w-3.5 h-3.5" />
-              <span>Dynamic Firestore Repository &bull; Live Deployments</span>
-            </div>
-            
+          {/* Header Section with Responsive Typography */}
+          <div className="text-left mb-10 border-b border-neutral-800/80 pb-8">
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
               <div>
-                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold text-white tracking-tight">
-                  Engineering <span className="text-gold-gradient">Project Archive</span>
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white tracking-tight leading-tight">
+                  Engineering Project Archive
                 </h1>
-                <p className="mt-2 text-neutral-400 text-sm sm:text-base font-light max-w-2xl">
+                <p className="mt-3 text-neutral-400 text-sm md:text-base font-light max-w-2xl leading-relaxed">
                   Enterprise-grade portfolio archive synchronized live with backend Firestore database. Explore full-stack systems, computer vision models, and custom OS architectures.
                 </p>
               </div>
 
-              {/* Status Telemetry Pill */}
-              <div className="flex items-center gap-3 p-3 rounded-2xl bg-obsidian-900 border border-gold/30 font-mono text-xs">
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]"></div>
-                <div>
-                  <span className="text-neutral-400 block text-[10px] uppercase">Database Sync</span>
-                  <span className="text-white font-bold">{projects.length} Production Deployments</span>
-                </div>
+              {/* Live Sync Indicator Badge */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-800 font-mono text-xs self-start lg:self-auto shrink-0">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]"></span>
+                <span className="text-neutral-400 uppercase tracking-wider text-[11px]">Database Sync:</span>
+                <span className="text-white font-semibold">
+                  {loading ? 'SYNCING...' : `${projects.length} Production Deployments`}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Control Bar: Search & Category Filter */}
-          <div className="p-4 sm:p-6 rounded-2xl glass-panel border border-white/10 mb-12 shadow-2xl">
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+          {/* Filter Bar: Stacking Flex Layout */}
+          <div className="p-4 sm:p-5 rounded-xl bg-neutral-900/40 border border-neutral-800/80 mb-10">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 w-full">
               
-              {/* Search Box */}
-              <div className="relative flex-1 max-w-md">
-                <Search className="w-4 h-4 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2" />
+              {/* Sleek Dark Search Field */}
+              <div className="relative flex-1 w-full md:max-w-md">
+                <Search className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Filter by title, stack (e.g. Python, TensorFlow, Zsh)..."
-                  className="w-full pl-11 pr-4 py-2.5 rounded-xl bg-obsidian-950 border border-white/10 text-white placeholder-neutral-500 text-xs sm:text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold transition-colors font-mono"
+                  placeholder="Filter by title, stack..."
+                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-obsidian-950 border border-neutral-800 text-white placeholder-neutral-500 text-xs sm:text-sm focus:outline-none focus:border-gold/60 transition-colors font-mono"
                 />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400 hover:text-white"
-                  >
-                    Clear
-                  </button>
-                )}
               </div>
 
-              {/* Category Filter Pills */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
-                <Filter className="w-3.5 h-3.5 text-gold shrink-0 hidden sm:inline" />
-                {categories.map((cat) => (
+              {/* Category Toggle Buttons: flex-wrap justify-start */}
+              <div className="flex flex-wrap items-center justify-start gap-1.5 sm:gap-2">
+                {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-all duration-300 shrink-0 ${
+                    className={`px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-colors shrink-0 ${
                       selectedCategory === cat
-                        ? 'bg-gold text-obsidian-950 font-bold shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                        : 'bg-white/[0.03] border border-white/10 text-neutral-400 hover:text-white hover:border-white/20'
+                        ? 'bg-gold text-obsidian-950 font-bold'
+                        : 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700'
                     }`}
                   >
                     {cat}
@@ -144,146 +130,131 @@ export default function ProjectsArchivePage() {
             </div>
           </div>
 
-          {/* Loading State */}
+          {/* Loading Indicator */}
           {loading && (
             <div className="py-24 text-center">
-              <Loader2 className="w-10 h-10 animate-spin text-gold mx-auto mb-4" />
-              <div className="text-sm font-mono text-neutral-400">
-                Syncing project entities from backend Firestore database...
+              <Loader2 className="w-8 h-8 animate-spin text-gold mx-auto mb-3" />
+              <div className="text-xs font-mono text-neutral-500">
+                Retrieving database records from Firestore...
               </div>
             </div>
           )}
 
-          {/* Empty Search Result */}
+          {/* Empty Search State */}
           {!loading && filteredProjects.length === 0 && (
-            <div className="py-20 text-center rounded-3xl glass-panel border border-white/10">
-              <Layers className="w-12 h-12 text-neutral-500 mx-auto mb-3" />
-              <h3 className="text-lg font-heading font-bold text-white mb-1">
-                No matching systems found
+            <div className="py-20 text-center rounded-2xl bg-neutral-900/30 border border-neutral-800">
+              <Database className="w-10 h-10 text-neutral-600 mx-auto mb-3" />
+              <h3 className="text-base font-heading font-semibold text-white mb-1">
+                No matching projects found
               </h3>
-              <p className="text-xs font-mono text-neutral-400 mb-4">
-                No database records match your filter criteria "{searchQuery}".
+              <p className="text-xs font-mono text-neutral-500 mb-4">
+                No entities match query "{searchQuery}" in category [{selectedCategory}].
               </p>
               <button
                 onClick={() => {
                   setSearchQuery('');
-                  setSelectedCategory('All');
+                  setSelectedCategory('ALL');
                 }}
-                className="px-4 py-2 rounded-xl bg-gold/10 border border-gold/40 text-gold text-xs font-mono uppercase"
+                className="px-3 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-gold text-xs font-mono uppercase"
               >
                 Reset Filters
               </button>
             </div>
           )}
 
-          {/* Dynamic Projects Grid */}
+          {/* Clean Grid UI: Spacious Responsive CSS Grid (1 col on mobile, 2 on tablet, 3 on desktop) */}
           {!loading && filteredProjects.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-              {filteredProjects.map((project, index) => {
-                const delayClass = `float-delay-${index % 5}`;
-                return (
-                  <article
-                    key={project.id || index}
-                    className={`floating-card ${delayClass} flex flex-col h-full`}
-                  >
-                    <div className="h-full rounded-3xl overflow-hidden glass-panel border border-white/10 hover:border-gold/50 flex flex-col justify-between group transition-all duration-500 shadow-[0_20px_40px_rgba(0,0,0,0.6)]">
-                      
-                      {/* Image Thumbnail with Overlay */}
-                      <div className="relative aspect-[16/9] w-full overflow-hidden bg-obsidian-950 border-b border-white/5">
-                        {project.image ? (
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-                            onError={(e) => {
-                              e.currentTarget.src = '/images/preview.png';
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-obsidian-900 text-neutral-500 font-mono text-xs">
-                            System Graphic Placeholder
-                          </div>
-                        )}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 items-stretch">
+              {filteredProjects.map((project, index) => (
+                <article
+                  key={project.id || index}
+                  className="rounded-2xl overflow-hidden border border-white/5 hover:border-neutral-700 bg-obsidian-900/80 transition-all duration-300 flex flex-col justify-between shadow-xl"
+                >
+                  
+                  {/* Top Half: aspect-video container with rounded top corners */}
+                  <div className="relative w-full aspect-video bg-neutral-950 overflow-hidden rounded-t-2xl flex items-center justify-center border-b border-white/5">
+                    <img
+                      src={project.image || '/images/preview.png'}
+                      alt={project.title}
+                      className="w-full h-full object-cover object-center rounded-t-2xl transition-transform duration-500 ease-out hover:scale-105"
+                      onError={(e) => {
+                        e.currentTarget.src = '/images/preview.png';
+                      }}
+                    />
 
-                        {/* Top Category Badge */}
-                        <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-lg bg-obsidian-950/90 border border-gold/30 backdrop-blur-md text-[10px] font-mono text-gold uppercase tracking-wider">
-                          <Cpu className="w-3 h-3" />
-                          <span>{project.category || 'Engineering'}</span>
-                        </div>
-
-                        {/* Date Badge */}
-                        {project.date && (
-                          <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-obsidian-950/90 border border-white/10 backdrop-blur-md text-[10px] font-mono text-neutral-400">
-                            <Calendar className="w-3 h-3" />
-                            <span>{project.date}</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Card Content Body */}
-                      <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-xl font-heading font-bold text-white group-hover:text-gold transition-colors mb-2">
-                            {project.title}
-                          </h3>
-                          <p className="text-xs text-neutral-300 font-light leading-relaxed mb-5 line-clamp-3">
-                            {project.desc}
-                          </p>
-                        </div>
-
-                        <div>
-                          {/* Tech Badge Pills */}
-                          {Array.isArray(project.tech) && project.tech.length > 0 && (
-                            <div className="flex flex-wrap gap-1.5 mb-6">
-                              {project.tech.map((t, tIdx) => (
-                                <span
-                                  key={tIdx}
-                                  className="px-2.5 py-0.5 rounded-md bg-white/[0.03] border border-white/10 text-[10px] font-mono text-neutral-300"
-                                >
-                                  {t}
-                                </span>
-                              ))}
-                            </div>
-                          )}
-
-                          {/* Action Links */}
-                          <div className="pt-4 border-t border-white/10 flex items-center justify-between gap-3">
-                            {project.live && project.live !== '#' ? (
-                              <a
-                                href={project.live}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-4 py-2 rounded-xl bg-gold text-obsidian-950 font-heading font-bold text-xs uppercase tracking-wider hover:bg-white transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(212,175,55,0.2)]"
-                              >
-                                <span>Live Demo</span>
-                                <ExternalLink className="w-3.5 h-3.5" />
-                              </a>
-                            ) : (
-                              <span className="text-[11px] font-mono text-neutral-500 italic">
-                                Private / Internal
-                              </span>
-                            )}
-
-                            {project.code && project.code !== '#' && (
-                              <a
-                                href={project.code}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-3.5 py-2 rounded-xl bg-white/[0.04] border border-white/15 text-neutral-300 hover:text-white hover:border-gold text-xs font-mono uppercase flex items-center gap-1.5 transition-colors"
-                              >
-                                <Github className="w-3.5 h-3.5" />
-                                <span>Code</span>
-                              </a>
-                            )}
-                          </div>
-                        </div>
-
-                      </div>
-
+                    {/* Category Badge: Absolute top-4 left-4 z-10 */}
+                    <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 text-xs font-medium text-yellow-500 rounded-md uppercase tracking-wider">
+                      {project.category || 'ENGINEERING'}
                     </div>
-                  </article>
-                );
-              })}
+                  </div>
+
+                  {/* Bottom Half: Spacious Typography & Breathing Room (p-6 sm:p-8) */}
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between bg-neutral-900/40">
+                    <div>
+                      {/* Title: text-xl font-semibold text-white tracking-tight mb-2 */}
+                      <h3 className="text-xl font-semibold text-white tracking-tight mb-2 line-clamp-1">
+                        {project.title}
+                      </h3>
+                      
+                      {/* Description: text-sm text-neutral-400 leading-relaxed line-clamp-3 mb-6 */}
+                      <p className="text-sm text-neutral-400 leading-relaxed line-clamp-3 mb-6">
+                        {project.desc}
+                      </p>
+
+                      {/* Tech Pills: flex flex-wrap gap-2 */}
+                      {Array.isArray(project.tech) && project.tech.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-6">
+                          {project.tech.map((t, tIdx) => (
+                            <span
+                              key={tIdx}
+                              className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-neutral-300 font-mono"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Footer of Card: Flex row with Date on left, Live & Code buttons on right */}
+                    <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                      <div className="flex items-center gap-1.5 text-xs font-mono text-neutral-500">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>{project.date || 'Active'}</span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        {project.live && project.live !== '#' && (
+                          <a
+                            href={project.live}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gold text-obsidian-950 text-xs font-heading font-semibold uppercase hover:bg-white transition-colors"
+                          >
+                            <span>Live</span>
+                            <ExternalLink className="w-3 h-3" />
+                          </a>
+                        )}
+
+                        {project.code && project.code !== '#' && (
+                          <a
+                            href={project.code}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 rounded-lg bg-white/5 border border-white/10 text-neutral-300 hover:text-white hover:border-neutral-600 transition-colors"
+                            title="View Source Code"
+                            aria-label={`View code for ${project.title}`}
+                          >
+                            <Github className="w-4 h-4" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+
+                  </div>
+
+                </article>
+              ))}
             </div>
           )}
 

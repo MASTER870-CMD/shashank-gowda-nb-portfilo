@@ -10,7 +10,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-obsidian-950 border-t border-white/10 py-16 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-white/5 items-center">
           
@@ -82,10 +82,8 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-[11px]">
             <span className="flex items-center gap-1.5 text-neutral-300">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-              Gateway: Node.js Express
+              Gateway: Node.js Express &bull; Built with React & TypeScript
             </span>
-            <span>&bull;</span>
-            <span className="text-gold font-medium">Built with Next.js Turbopack & TypeScript</span>
           </div>
         </div>
 

@@ -1,13 +1,23 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Terminal, Shield, Cpu, Activity, Send, Menu, X, ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Terminal, Menu, X, ArrowUpRight } from 'lucide-react';
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [apiLatency, setApiLatency] = useState(14);
   const [apiStatus, setApiStatus] = useState('ONLINE');
+
+  // Dynamic route helper: if on '/', anchor to #section; if on another route, go to /#section
+  const getHref = (hash) => {
+    return isHomePage ? hash : `/${hash}`;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,7 +25,7 @@ export default function Navbar() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    // Dynamic latency simulation based on real health checks
+    // Dynamic latency ping from backend health endpoint
     const checkApi = async () => {
       const start = performance.now();
       try {
@@ -26,8 +36,7 @@ export default function Navbar() {
           setApiStatus('ONLINE');
         }
       } catch {
-        // Fallback for local dev when backend might be warming up
-        setApiLatency(15);
+        setApiLatency(14);
       }
     };
 
@@ -44,116 +53,126 @@ export default function Navbar() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-obsidian-950/85 backdrop-blur-xl border-b border-white/10 shadow-2xl shadow-black/80 py-3'
-          : 'bg-transparent py-5'
+          ? 'bg-obsidian-950/90 backdrop-blur-xl border-b border-white/5 shadow-2xl shadow-black/80 py-2.5 sm:py-3'
+          : 'bg-transparent py-4 sm:py-5'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
         <div className="flex items-center justify-between">
-          {/* Brand Identity */}
-          <a href="#hero" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-obsidian-900 border border-gold/40 flex items-center justify-center text-gold group-hover:border-gold group-hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300">
-              <Terminal className="w-5 h-5 text-gold" />
+          
+          {/* Brand Identity / Logo with No-Wrap */}
+          <Link href={getHref('#hero')} className="flex items-center gap-2.5 sm:gap-3 group whitespace-nowrap shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-obsidian-900 border border-gold/40 flex items-center justify-center text-gold group-hover:border-gold group-hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 shrink-0">
+              <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
             </div>
             <div>
-              <div className="text-lg font-heading font-bold text-white tracking-tight flex items-center gap-1.5">
-                Shashank Gowda NB
+              <div className="text-sm sm:text-base font-heading font-bold text-white tracking-tight flex items-center gap-1.5 whitespace-nowrap">
+                <span>Shashank Gowda NB</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block animate-pulse"></span>
               </div>
-              <div className="text-[10px] font-mono uppercase tracking-widest text-gold/80 font-medium">
-                Systems Architect & AI Eng
+              <div className="text-[9px] sm:text-[10px] font-mono uppercase tracking-widest text-gold/80 font-medium whitespace-nowrap">
+                Systems Architect &bull; AI Eng
               </div>
             </div>
-          </a>
+          </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-300">
-            <a href="#hero" className="hover:text-gold transition-colors duration-200">
+          {/* Desktop Navigation Links (>= 768px) */}
+          <nav className="hidden md:flex items-center gap-6 lg:gap-8 text-xs lg:text-sm font-medium text-neutral-300">
+            <Link href={getHref('#hero')} className="hover:text-gold transition-colors duration-200">
               System Spec
-            </a>
-            <a href="#skills" className="hover:text-gold transition-colors duration-200">
+            </Link>
+            <Link href={getHref('#skills')} className="hover:text-gold transition-colors duration-200">
               Tech Matrix
-            </a>
-            <a href="#projects" className="hover:text-gold transition-colors duration-200">
+            </Link>
+            <Link href={getHref('#projects')} className="hover:text-gold transition-colors duration-200">
               Engineering Grid
-            </a>
-            <a href="#contact" className="hover:text-gold transition-colors duration-200">
+            </Link>
+            <Link href="/projects" className="hover:text-gold transition-colors duration-200">
+              Archive
+            </Link>
+            <Link href={getHref('#contact')} className="hover:text-gold transition-colors duration-200">
               Contact API
-            </a>
+            </Link>
           </nav>
 
-          {/* Systems Status Badge & CTA */}
-          <div className="hidden lg:flex items-center gap-4">
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono text-neutral-300">
+          {/* Right Action Cluster: Status Badge & CTA Button */}
+          <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+            
+            {/* Live Telemetry Pill (Tablet/Desktop) */}
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono text-neutral-300">
               <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
               <span>API {apiStatus}</span>
               <span className="text-neutral-500">|</span>
               <span className="text-gold font-semibold">{apiLatency}ms</span>
             </div>
 
-            <a
-              href="#contact"
-              className="relative inline-flex items-center gap-2 px-5 py-2 rounded-lg bg-gold text-obsidian-950 font-semibold text-xs uppercase tracking-wider hover:bg-white hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] transition-all duration-300 group"
+            {/* Initiate Contact CTA - Hidden on mobile (< 768px) to prevent collisions, accessible via drawer */}
+            <Link
+              href={getHref('#contact')}
+              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gold text-obsidian-950 font-heading font-bold text-xs uppercase tracking-wider hover:bg-white hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 shrink-0"
             >
               <span>Initiate Contact</span>
-              <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </a>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+
+            {/* Mobile Menu Hamburger Toggle (< 768px) */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg bg-white/[0.04] border border-white/10 text-neutral-300 hover:text-gold transition-colors shrink-0"
+              aria-label="Toggle navigation menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+
           </div>
 
-          {/* Mobile Menu Toggle */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg bg-white/[0.04] border border-white/10 text-neutral-300 hover:text-gold"
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile Dropdown Drawer (< 768px) */}
         {mobileMenuOpen && (
-          <div className="md:hidden mt-4 p-5 rounded-2xl bg-obsidian-900/95 backdrop-blur-2xl border border-gold/20 flex flex-col gap-4 shadow-2xl">
-            <a
-              href="#hero"
+          <div className="md:hidden mt-3 p-5 rounded-2xl bg-black/90 backdrop-blur-lg border border-neutral-800 flex flex-col gap-3 shadow-2xl animate-fadeIn">
+            <Link
+              href={getHref('#hero')}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-300 hover:text-gold font-medium py-2 border-b border-white/5"
+              className="text-neutral-200 hover:text-gold font-mono text-xs uppercase tracking-wider py-2.5 border-b border-white/5"
             >
-              System Spec
-            </a>
-            <a
-              href="#skills"
+              &gt; System Spec
+            </Link>
+            <Link
+              href={getHref('#skills')}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-300 hover:text-gold font-medium py-2 border-b border-white/5"
+              className="text-neutral-200 hover:text-gold font-mono text-xs uppercase tracking-wider py-2.5 border-b border-white/5"
             >
-              Tech Matrix
-            </a>
-            <a
-              href="#projects"
+              &gt; Tech Matrix
+            </Link>
+            <Link
+              href={getHref('#projects')}
               onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-300 hover:text-gold font-medium py-2 border-b border-white/5"
+              className="text-neutral-200 hover:text-gold font-mono text-xs uppercase tracking-wider py-2.5 border-b border-white/5"
             >
-              Engineering Grid
-            </a>
-            <a
-              href="#contact"
+              &gt; Engineering Grid
+            </Link>
+            <Link
+              href="/projects"
               onClick={() => setMobileMenuOpen(false)}
-              className="text-neutral-300 hover:text-gold font-medium py-2"
+              className="text-gold font-mono text-xs uppercase tracking-wider py-2.5 border-b border-white/5 font-semibold"
             >
-              Contact API
-            </a>
+              &gt; Full Projects Archive
+            </Link>
+            <Link
+              href={getHref('#contact')}
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-neutral-200 hover:text-gold font-mono text-xs uppercase tracking-wider py-2.5"
+            >
+              &gt; Contact API Gateway
+            </Link>
 
-            <div className="pt-2 flex items-center justify-between border-t border-white/10">
-              <div className="flex items-center gap-2 text-xs font-mono text-neutral-400">
+            <div className="pt-3 flex items-center justify-between border-t border-neutral-800 text-[11px] font-mono text-neutral-400">
+              <span className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
                 <span>API Gateway: {apiLatency}ms</span>
-              </div>
-              <a
-                href="#contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="px-4 py-1.5 rounded-lg bg-gold text-obsidian-950 font-bold text-xs uppercase"
-              >
-                Engage
-              </a>
+              </span>
+              <span className="text-gold uppercase font-semibold">Active</span>
             </div>
           </div>
         )}

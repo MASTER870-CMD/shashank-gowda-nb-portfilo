@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { 
   Terminal, 
   Bot, 
@@ -130,11 +131,13 @@ export default function ProjectGrid() {
 
   return (
     <section id="projects" className="py-32 bg-obsidian-900/60 relative overflow-hidden">
+      {/* Scroll Anchor Alias */}
+      <div id="engineering-grid" className="scroll-mt-28" />
       {/* Subtle Background Glows (Zero purple) */}
       <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-radial-gold-glow pointer-events-none -z-10" />
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-gold/5 blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
         
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16">
@@ -182,11 +185,8 @@ export default function ProjectGrid() {
                       alt={`${project.title} - ${project.subtitle}`}
                       fill
                       sizes="(max-width: 768px) 100vw, 400px"
-                      className="object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                      className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-102"
                     />
-                    
-                    {/* Deep obsidian gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian-950 via-obsidian-950/40 to-transparent" />
 
                     {/* Category Tag */}
                     <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 rounded-lg bg-obsidian-950/90 border border-gold/30 backdrop-blur-md text-[11px] font-mono text-gold uppercase tracking-wider">
@@ -275,6 +275,18 @@ export default function ProjectGrid() {
               </article>
             );
           })}
+        </div>
+
+        {/* Terminal Call to Action: View All Projects Archive */}
+        <div className="mt-16 text-center">
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-obsidian-900 border border-gold/40 hover:border-gold hover:shadow-[0_0_30px_rgba(212,175,55,0.3)] text-gold hover:text-white font-mono text-sm uppercase tracking-wider transition-all duration-300 group"
+          >
+            <Terminal className="w-4 h-4 text-gold group-hover:animate-pulse" />
+            <span className="font-bold">&gt;_ INITIALIZE: FULL_PROJECT_REPOSITORY</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
+          </Link>
         </div>
 
       </div>

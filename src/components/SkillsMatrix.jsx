@@ -110,10 +110,11 @@ export default function SkillsMatrix() {
   return (
     <section id="skills" className="py-28 bg-obsidian-950 relative overflow-hidden">
       {/* Background Accent Gradients */}
+      <div id="tech-matrix" className="scroll-mt-28" />
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-radial-gold-glow pointer-events-none -z-10" />
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-gold/5 blur-3xl pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-20">
