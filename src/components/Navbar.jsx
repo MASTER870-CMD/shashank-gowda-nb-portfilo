@@ -57,11 +57,11 @@ export default function Navbar() {
           : 'bg-transparent'
       }`}
     >
-      {/* 1. Global Navbar Container (Max-Width & Spacing) */}
-      <div className="w-full max-w-[1400px] mx-auto px-6 md:px-12 flex items-center justify-between h-24">
+      {/* 1. The Parent Container */}
+      <div className="relative flex items-center justify-between w-full h-24 max-w-[1400px] mx-auto px-6 md:px-12">
         
-        {/* 2. Left Column (Logo): flex-1 flex justify-start items-center */}
-        <div className="flex-1 flex justify-start items-center">
+        {/* 2. Left Column (Logo) */}
+        <div className="flex items-center justify-start z-10">
           <Link href={getHref('#hero')} className="flex items-center gap-2.5 sm:gap-3 group whitespace-nowrap shrink-0">
             <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-obsidian-900 border border-gold/40 flex items-center justify-center text-gold group-hover:border-gold group-hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 shrink-0">
               <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
@@ -78,8 +78,8 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. Center Column (Navigation Links): hidden lg:flex justify-center items-center gap-8 */}
-        <nav className="hidden lg:flex justify-center items-center gap-8 xl:gap-10">
+        {/* 3. Center Column (Links - THE FIX: Absolute Centering with Zero Collision Spacing) */}
+        <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-5 xl:gap-6 2xl:gap-8 w-max z-0">
           <Link
             href={getHref('#hero')}
             className="text-[13px] uppercase tracking-[0.1em] font-semibold text-neutral-400 hover:text-[#D4AF37] transition-colors duration-300 whitespace-nowrap"
@@ -112,10 +112,10 @@ export default function Navbar() {
           </Link>
         </nav>
 
-        {/* 2. Right Column (Action Buttons): flex-1 hidden lg:flex justify-end items-center gap-6 */}
-        <div className="flex-1 hidden lg:flex justify-end items-center gap-6">
-          {/* Live Telemetry Pill */}
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono text-neutral-300 whitespace-nowrap">
+        {/* 4. Right Column (Buttons) */}
+        <div className="hidden lg:flex items-center justify-end gap-4 xl:gap-6 z-10">
+          {/* Live Telemetry Pill - Rendered on >=1380px displays to ensure spacious margin */}
+          <div className="hidden min-[1380px]:flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono text-neutral-300 whitespace-nowrap">
             <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
             <span>API {apiStatus}</span>
             <span className="text-neutral-500">|</span>
@@ -132,8 +132,8 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 4. Mobile Hamburger Toggle (< lg) */}
-        <div className="lg:hidden flex items-center justify-end">
+        {/* 5. Responsive Safety - Mobile Hamburger Toggle (< lg) */}
+        <div className="lg:hidden flex items-center justify-end z-10">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-2.5 rounded-lg bg-white/[0.04] border border-white/10 text-neutral-300 hover:text-gold transition-colors shrink-0"
