@@ -1,0 +1,585 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Midas Banking System | Shashank Gowda NB</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+
+    <style>
+        /* --- 1. PREMIUM VARIABLES --- */
+        :root {
+            --primary: #e8b923;
+            --primary-glow: rgba(232, 185, 35, 0.4);
+            --dark-bg: #050505;
+            --card-bg: #0a0a0a;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --font-main: 'Outfit', sans-serif;
+            --font-heading: 'Space Grotesk', sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: none; }
+        
+        body { 
+            font-family: var(--font-main); 
+            background-color: var(--dark-bg); 
+            color: #fff; 
+            overflow-x: hidden; 
+            line-height: 1.7;
+        }
+
+        ::selection { background: var(--primary); color: #000; }
+
+        /* --- 2. GLOBAL UI --- */
+        #scrollProgress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary); width: 0%; z-index: 9999; box-shadow: 0 0 15px var(--primary); }
+
+        #cursor { 
+            position: fixed; width: 20px; height: 20px; border: 2px solid var(--primary); 
+            border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); 
+            z-index: 10000; transition: transform 0.15s ease, opacity 0.2s; mix-blend-mode: difference; 
+        }
+        .hover-active { transform: translate(-50%, -50%) scale(3.5) !important; background: rgba(232, 185, 35, 0.1); border-color: transparent !important; backdrop-filter: blur(2px); }
+
+        #preloader { position: fixed; inset: 0; background: #000; z-index: 10001; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
+        .loader-text { font-family: var(--font-heading); font-size: 2rem; font-weight: 700; color: var(--primary); letter-spacing: -1px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* --- 3. NAVBAR --- */
+        nav { background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 1rem 0; z-index: 1000; }
+        .navbar-brand { font-family: var(--font-heading); font-weight: 700; font-size: 1.5rem; color: #fff !important; }
+        .navbar-brand span { color: var(--primary); }
+        .btn-back { border: 1px solid var(--glass-border); padding: 8px 25px; border-radius: 50px; color: #ccc; font-weight: 500; font-size: 0.9rem; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-back:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); border-color: var(--primary); }
+
+        /* --- 4. HERO SECTION --- */
+        .case-hero { padding: 140px 0 60px; text-align: center; position: relative; }
+        .hero-bg-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 600px; background: radial-gradient(circle at top, rgba(232,185,35,0.08) 0%, transparent 70%); pointer-events: none; z-index: -1; }
+        
+        .project-tag { display: inline-block; padding: 6px 16px; border-radius: 50px; background: rgba(232,185,35,0.05); border: 1px solid rgba(232,185,35,0.2); color: var(--primary); font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+        
+        h1 { font-family: var(--font-heading); font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; margin-bottom: 20px; letter-spacing: -2px; line-height: 1.1; }
+        .hero-desc { font-size: clamp(1rem, 2vw, 1.2rem); color: #a0a0a0; max-width: 700px; margin: 0 auto 40px; font-weight: 300; }
+
+        .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+        .btn-main { padding: 12px 30px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
+        .btn-glow { background: var(--primary); color: #000; border: none; box-shadow: 0 10px 30px rgba(232, 185, 35, 0.2); }
+        .btn-glow:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(232, 185, 35, 0.4); background: #fff; }
+        .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+        .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+
+        /* --- 5. CONTENT BOXES --- */
+        .content-box { background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px; margin-bottom: 30px; position: relative; overflow: hidden; }
+        .content-box h2 { font-family: var(--font-heading); color: #fff; margin-bottom: 25px; font-size: 1.8rem; }
+        
+        /* Tech Stack */
+        .tech-stack { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 35px; }
+        .tech-badge { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 10px 20px; border-radius: 12px; font-size: 0.9rem; color: #ccc; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .tech-badge:hover { border-color: var(--primary); color: #fff; background: rgba(232, 185, 35, 0.1); transform: translateY(-3px); }
+        .tech-badge i { color: var(--primary); }
+
+        /* Flow Diagram */
+        .flow-diagram { 
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; 
+            padding: 30px; background: #000; border-radius: 16px; border: 1px dashed #333; margin: 40px 0; 
+        }
+        .flow-node { background: #111; padding: 15px 25px; border-radius: 10px; border: 1px solid var(--primary); color: #fff; text-align: center; flex: 1; min-width: 120px; font-weight: 600; font-family: var(--font-heading); }
+        .flow-arrow { color: #444; font-size: 1.5rem; }
+
+        /* Key Achievements List */
+        .achievement-list li { margin-bottom: 18px; color: #a0a0a0; display: flex; gap: 15px; align-items: flex-start; }
+        .achievement-list i { color: var(--primary); margin-top: 5px; font-size: 1.1rem; flex-shrink: 0; }
+        .achievement-list strong { color: #fff; font-weight: 600; }
+
+        /* Certificate Sidebar */
+        .cert-container { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--glass-border); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .cert-img { width: 100%; display: block; transition: 0.5s; }
+        .cert-container:hover .cert-img { transform: scale(1.03); filter: brightness(1.1); }
+
+        /* Footer */
+        footer { padding: 40px 0; background: #020202; border-top: 1px solid #111; text-align: center; font-size: 0.9rem; color: #666; margin-top: 50px; }
+
+        @media (max-width: 768px) {
+            .flow-diagram { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+            .hero-btns { flex-direction: column; width: 100%; }
+            .btn-main { width: 100%; justify-content: center; }
+            .content-box { padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+<div id="cursor"></div>
+<div id="preloader"><div class="loader-text">Loading Project...</div></div>
+<div id="tsparticles" style="position: fixed; inset: 0; z-index: -1;"></div>
+
+<nav class="navbar fixed-top">
+    <div class="container">
+        <span class="navbar-brand hover-trigger">Shashank<span>.</span></span>
+        <a href="https://shashankgowdanb.netlify.app/more_project/projects" class="btn-back hover-trigger"><i class="bi bi-arrow-left"></i> Back to Portfolio</a>
+    </div>
+</nav>
+
+<section class="case-hero container">
+    <div class="hero-bg-glow"></div>
+    <div data-aos="fade-up">
+        <span class="project-tag">J.P. Morgan Chase & Co.</span>
+        <h1>Midas Banking System</h1>
+        <p class="hero-desc">A high-performance transaction processing engine engineered to handle real-time financial data streams with zero latency.</p>
+        
+        <div class="hero-btns">
+            <a href="https://github.com/MASTER870-CMD/midas-banking-core" target="_blank" class="btn-main btn-glow hover-trigger">
+                View Source Code <i class="bi bi-github"></i>
+            </a>
+            <a href="#certificate" class="btn-main btn-outline hover-trigger">
+                Verify Certificate <i class="bi bi-patch-check"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            
+            <div class="content-box" data-aos="fade-up">
+                <div class="tech-stack">
+                    <div class="tech-badge"><i class="bi bi-cup-hot"></i> Java 17</div>
+                    <div class="tech-badge"><i class="bi bi-box-seam"></i> Spring Boot</div>
+                    <div class="tech-badge"><i class="bi bi-activity"></i> Apache Kafka</div>
+                    <div class="tech-badge"><i class="bi bi-database"></i> H2 Database</div>
+                    <div class="tech-badge"><i class="bi bi-globe"></i> REST API</div>
+                </div>
+
+                <h2>Project Overview</h2>
+                <p class="text-secondary">
+                    During my engagement with the J.P. Morgan Software Engineering Virtual Experience, I was tasked with architecting <strong>Midas Core</strong>, a backend microservice designed to process high-volume financial transactions. The system ingests live data, validates user balances in real-time, persists records to an ACID-compliant database, and interfaces with an external incentive API.
+                </p>
+                
+                <div class="flow-diagram">
+                    <div class="flow-node">User</div>
+                    <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="flow-node">Kafka Stream</div>
+                    <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="flow-node">Spring Engine</div>
+                    <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="flow-node">H2 Database</div>
+                </div>
+            </div>
+
+            <div class="content-box" data-aos="fade-up">
+                <h2>Technical Achievements</h2>
+                <ul class="list-unstyled achievement-list">
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i> 
+                        <span><strong>Real-Time Messaging:</strong> Configured Apache Kafka consumers to ingest financial transaction data asynchronously, ensuring zero latency during high-traffic periods.</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i> 
+                        <span><strong>Data Persistence:</strong> Modeled complex SQL relationships using JPA entities (`UserRecord`, `TransactionRecord`) and integrated an in-memory H2 database for rapid testing.</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i> 
+                        <span><strong>API Development:</strong> Built a secure REST Controller (`/balance`) to expose user financial data to frontend clients, handling robust validation logic and edge cases.</span>
+                    </li>
+                    <li>
+                        <i class="bi bi-check-circle-fill"></i> 
+                        <span><strong>System Reliability:</strong> Wrote comprehensive JUnit integration tests to verify transaction flows and balance updates under load.</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+            <div class="content-box text-center" id="certificate" data-aos="fade-left">
+                <h4 class="mb-4 text-white">Official Certification</h4>
+                <div class="cert-container hover-trigger">
+                    <img src="./images/shashank-gowda-nb-jp-morgan.png" alt="JPMC Certificate" class="cert-img">
+                </div>
+                <p class="small text-muted mt-3 mb-3">Issued: January 3, 2026</p>
+                <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/Sj7temL583QAYpHXD/E6McHJDKsQYh79moz_Sj7temL583QAYpHXD_6958d71abeda68c4731a90a1_1767456280253_completion_certificate.pdf" target="_blank" class="btn-main btn-outline w-100 hover-trigger" style="justify-content: center;">
+                    View PDF Credentials
+                </a>
+            </div>
+
+            <div class="content-box" data-aos="fade-up" data-aos-delay="100">
+                <h4 class="mb-3 text-white">Why this matters?</h4>
+                <p class="text-secondary small mb-0">
+                    This project simulates the actual day-to-day work of a Backend Engineer at a top-tier investment bank. It demonstrates proficiency in <strong>Enterprise Java Development</strong>, <strong>Distributed Systems</strong>, and <strong>Financial Logic</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <p class="m-0">Designed & Engineered by <span style="color:var(--primary); font-weight:600;">Shashank Gowda NB</span></p>
+    </div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Init Animations
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('preloader');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 600);
+        
+        AOS.init({ duration: 800, once: true, offset: 50 });
+        initParticles();
+    });
+
+    // Custom Cursor Logic
+    const cursor = document.getElementById("cursor");
+    document.addEventListener("mousemove", e => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+    });
+    
+    document.querySelectorAll('.hover-trigger').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
+    });
+
+    // Scroll Bar
+    window.addEventListener('scroll', () => {
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById("scrollProgress").style.width = (window.scrollY / height) * 100 + "%";
+    });
+
+    // Particles Background
+    function initParticles() {
+        tsParticles.load("tsparticles", {
+            fpsLimit: 60,
+            background: { color: "#050505" },
+            particles: {
+                number: { value: 20 },
+                color: { value: "#e8b923" },
+                shape: { type: "circle" },
+                opacity: { value: 0.1, random: true },
+                size: { value: 2, random: true },
+                move: { enable: true, speed: 0.5, direction: "top", outModes: "out" }
+            }
+        });
+    }
+</script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>Midas Banking System | Shashank Gowda NB</title>
+<meta name="description" content="Technical Case Study of the Midas Banking System engineered by Shashank Gowda NB.">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<style>
+    /* =========================================
+       1. VARIABLES & RESET (MATCHING ARCHIVE)
+       ========================================= */
+    :root {
+        --primary: #e8b923;
+        --primary-glow: rgba(232, 185, 35, 0.4);
+        --dark-bg: #050505;
+        --card-bg: #0f0f0f;
+        --border-color: #222;
+        --text-muted: #888;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+    
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background-color: var(--dark-bg); 
+        color: #fff; 
+        overflow-x: hidden; 
+        line-height: 1.7;
+    }
+
+    ::selection { background: var(--primary); color: #000; }
+
+    /* =========================================
+       2. GLOBAL UI ELEMENTS
+       ========================================= */
+    #scrollProgress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary); width: 0%; z-index: 9999; box-shadow: 0 0 15px var(--primary); }
+
+    #cursor { position: fixed; width: 20px; height: 20px; border: 2px solid var(--primary); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 10000; transition: transform 0.1s ease; mix-blend-mode: difference; }
+    @media (hover: none) { #cursor { display: none !important; } }
+
+    #preloader { position: fixed; inset: 0; background: var(--dark-bg); z-index: 10001; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
+    .loader-content { text-align: center; }
+    .loader-text { font-size: 2rem; font-weight: 800; color: var(--primary); animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
+
+    /* =========================================
+       3. NAVBAR & HERO
+       ========================================= */
+    .navbar { background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem 0; transition: 0.3s; }
+    .navbar-brand { font-weight: 800; font-size: 1.5rem; color: #fff !important; }
+    .navbar-brand span { color: var(--primary); }
+
+    .case-hero { padding: 140px 0 60px; text-align: center; position: relative; }
+    .hero-bg-glow { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 100%; height: 600px; background: radial-gradient(circle at top, rgba(232,185,35,0.08) 0%, transparent 70%); pointer-events: none; z-index: -1; }
+    
+    .project-tag { display: inline-block; padding: 6px 16px; border-radius: 50px; background: rgba(232,185,35,0.05); border: 1px solid rgba(232,185,35,0.2); color: var(--primary); font-size: 0.85rem; font-weight: 600; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+    
+    h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; margin-bottom: 20px; letter-spacing: -2px; line-height: 1.1; }
+    .hero-desc { font-size: clamp(1rem, 2vw, 1.2rem); color: #a0a0a0; max-width: 700px; margin: 0 auto 40px; font-weight: 300; }
+
+    .hero-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .btn-main { padding: 12px 30px; border-radius: 50px; font-weight: 600; text-decoration: none; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; }
+    .btn-glow { background: var(--primary); color: #000; border: none; box-shadow: 0 10px 30px rgba(232, 185, 35, 0.2); }
+    .btn-glow:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(232, 185, 35, 0.4); background: #fff; }
+    .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
+    .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+
+    /* =========================================
+       4. CONTENT LAYOUT
+       ========================================= */
+    .content-box { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 40px; margin-bottom: 30px; position: relative; overflow: hidden; }
+    .content-box h2 { color: #fff; margin-bottom: 25px; font-size: 1.8rem; font-weight: 700; border-left: 4px solid var(--primary); padding-left: 15px; }
+    
+    /* Tech Stack */
+    .tech-stack { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 35px; }
+    .tech-badge { background: rgba(255,255,255,0.03); border: 1px solid var(--border-color); padding: 10px 20px; border-radius: 12px; font-size: 0.9rem; color: #ccc; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+    .tech-badge:hover { border-color: var(--primary); color: #fff; background: rgba(232, 185, 35, 0.1); transform: translateY(-3px); }
+    .tech-badge i { color: var(--primary); }
+
+    /* Flow Diagram */
+    .flow-diagram { 
+        display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; 
+        padding: 30px; background: #000; border-radius: 16px; border: 1px dashed #333; margin: 40px 0; 
+    }
+    .flow-node { background: #111; padding: 15px 25px; border-radius: 10px; border: 1px solid var(--primary); color: #fff; text-align: center; flex: 1; min-width: 120px; font-weight: 600; }
+    .flow-arrow { color: #444; font-size: 1.5rem; }
+
+    /* Achievements */
+    .achievement-list li { margin-bottom: 18px; color: #a0a0a0; display: flex; gap: 15px; align-items: flex-start; }
+    .achievement-list i { color: var(--primary); margin-top: 5px; font-size: 1.1rem; flex-shrink: 0; }
+    .achievement-list strong { color: #fff; font-weight: 600; }
+
+    /* Sidebar */
+    .cert-container { position: relative; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); margin-bottom: 20px; }
+    .cert-img { width: 100%; display: block; transition: 0.5s; }
+    .cert-container:hover .cert-img { transform: scale(1.03); filter: brightness(1.1); }
+
+    /* Footer */
+    footer { padding: 40px 0; background: #020202; border-top: 1px solid #111; text-align: center; font-size: 0.9rem; color: #666; margin-top: 50px; }
+
+    @media (max-width: 768px) {
+        .flow-diagram { flex-direction: column; }
+        .flow-arrow { transform: rotate(90deg); }
+        .hero-btns { flex-direction: column; width: 100%; }
+        .btn-main { width: 100%; justify-content: center; }
+        .content-box { padding: 25px; }
+    }
+</style>
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+<div id="cursor"></div>
+<div id="preloader"><div class="loader-content"><div class="loader-text">Loading Case Study...</div></div></div>
+<div id="tsparticles" style="position: fixed; inset: 0; z-index: -1;"></div>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="https://shashankgowdanb.netlify.app">Shashank<span>.</span></a>
+        <a href="https://shashankgowdanb.netlify.app/more_project/projects" class="btn btn-outline-light rounded-pill px-3 fw-bold" style="font-size: 0.9rem;">
+            <i class="bi bi-arrow-left me-1"></i> Back to Projects
+        </a>
+    </div>
+</nav>
+
+<section class="case-hero container">
+    <div class="hero-bg-glow"></div>
+    <div data-aos="fade-up">
+        <span class="project-tag">J.P. Morgan Chase & Co.</span>
+        <h1>Midas Banking System</h1>
+        <p class="hero-desc">A high-performance transaction processing engine engineered to handle real-time financial data streams with zero latency.</p>
+        
+        <div class="hero-btns">
+            <a href="https://github.com/MASTER870-CMD/midas-banking-core" target="_blank" class="btn-main btn-glow hover-trigger">
+                View Source Code <i class="bi bi-github"></i>
+            </a>
+            <a href="#certificate" class="btn-main btn-outline hover-trigger">
+                Verify Certificate <i class="bi bi-patch-check"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            
+            <div class="content-box" data-aos="fade-up">
+                <div class="tech-stack">
+                    <div class="tech-badge"><i class="bi bi-cup-hot"></i> Java 17</div>
+                    <div class="tech-badge"><i class="bi bi-box-seam"></i> Spring Boot</div>
+                    <div class="tech-badge"><i class="bi bi-activity"></i> Apache Kafka</div>
+                    <div class="tech-badge"><i class="bi bi-database"></i> H2 Database</div>
+                    <div class="tech-badge"><i class="bi bi-globe"></i> REST API</div>
+                </div>
+
+                <h2>Project Overview</h2>
+                <p class="text-secondary">
+                    During my engagement with the J.P. Morgan Software Engineering Virtual Experience, I was tasked with architecting <strong>Midas Core</strong>, a backend microservice designed to process high-volume financial transactions in real-time. The system ingests live data, validates user balances in real-time, persists records to an ACID-compliant database, and interfaces with an external incentive API.
+                </p>
+                
+                <div class="flow-diagram">
+                    <div class="flow-node">User</div>
+                    <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="flow-node">Kafka Stream</div>
+                    <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="flow-node">Spring Engine</div>
+                    <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+                    <div class="flow-node">H2 Database</div>
+                </div>
+            </div>
+
+            <div class="content-box" data-aos="fade-up">
+                <h2>See the Code in Action</h2>
+                <p class="text-secondary">
+                    Since this is a secure backend microservice, it runs in a server environment. Below is the live execution log verifying the <strong>Spring Boot</strong> startup and <strong>Kafka</strong> connection.
+                </p>
+                
+                <div style="background: #1e1e1e; border-radius: 10px; padding: 20px; font-family: 'Courier New', monospace; border: 1px solid #333; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                    <div style="display:flex; gap:8px; margin-bottom:15px; border-bottom: 1px solid #333; padding-bottom: 10px;">
+                        <span style="width:12px; height:12px; background:#ff5f56; border-radius:50%;"></span>
+                        <span style="width:12px; height:12px; background:#ffbd2e; border-radius:50%;"></span>
+                        <span style="width:12px; height:12px; background:#27c93f; border-radius:50%;"></span>
+                        <span style="color: #888; font-size: 12px; margin-left: 10px;">bash — java -jar midas-core.jar</span>
+                    </div>
+                    <div style="color: #4af626; font-size: 0.9rem; line-height: 1.5;">
+                        <p style="margin:0;">$ mvn spring-boot:run</p>
+                        <p style="color:#fff; margin:0;">  .   ____          _            __ _ _</p>
+                        <p style="color:#fff; margin:0;"> /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \</p>
+                        <p style="color:#fff; margin:0;">( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \</p>
+                        <p style="color:#fff; margin:0;"> \\/  ___)| |_)| | | | | || (_| |  ) ) ) )</p>
+                        <p style="color:#fff; margin:0;">  '  |____| .__|_| |_|_| |_\__, | / / / /</p>
+                        <p style="color:#fff; margin:0;"> =========|_|==============|___/=/_/_/_/</p>
+                        <p style="margin:0;">[INFO] Starting MidasCoreApplication using Java 17...</p>
+                        <p style="margin:0;">[INFO] Connected to <strong>Apache Kafka</strong> on port 9092</p>
+                        <p style="margin:0;">[INFO] <strong>H2 Database</strong> initialized at mem:midas_db</p>
+                        <p style="margin:0;">[INFO] REST Endpoint <strong>GET /balance</strong> is live</p>
+                        <p style="color:cyan; margin:0;">[SUCCESS] Started MidasBankingCore in 2.432 seconds (JVM running for 3.1)</p>
+                        <span class="typing-cursor" style="display:inline-block; width:10px; height:18px; background:#4af626; animation: blink 1s infinite;"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-box" data-aos="fade-up">
+                <h2>Key Achievements</h2>
+                <ul class="list-unstyled achievement-list">
+                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Real-Time Messaging:</strong> Configured Apache Kafka consumers to ingest financial transaction data asynchronously, ensuring zero latency during high-traffic periods.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>Data Persistence:</strong> Modeled SQL relationships using JPA entities (`UserRecord`, `TransactionRecord`) and integrated an in-memory H2 database for ACID-compliant storage.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>API Development:</strong> Built a REST Controller (`/balance`) to expose user financial data securely to frontend clients, handling validation logic and edge cases.</span></li>
+                    <li><i class="bi bi-check-circle-fill"></i> <span><strong>System Reliability:</strong> Wrote comprehensive JUnit integration tests to verify transaction flows and balance updates.</span></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+            <div class="content-box text-center" id="certificate" data-aos="fade-left">
+                <h4 class="mb-4 text-white">Official Certification</h4>
+                <div class="cert-container hover-trigger">
+                    <img src="./images/shashank-gowda-nb-jp-morgan.png" alt="JPMC Certificate" class="cert-img">
+                </div>
+                <p class="small text-muted mt-3 mb-3">Issued: January 3, 2026</p>
+                <a href="https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/Sj7temL583QAYpHXD/E6McHJDKsQYh79moz_Sj7temL583QAYpHXD_6958d71abeda68c4731a90a1_1767456280253_completion_certificate.pdf" target="_blank" class="btn-main btn-outline w-100 hover-trigger" style="justify-content: center;">
+                    View PDF Credentials
+                </a>
+            </div>
+
+            <div class="content-box" data-aos="fade-up" data-aos-delay="100">
+                <h4 class="mb-3 text-white">Why this matters?</h4>
+                <p class="text-secondary small mb-0">
+                    This project simulates the actual day-to-day work of a Backend Engineer at a top-tier investment bank. It demonstrates proficiency in <strong>Enterprise Java Development</strong>, <strong>Distributed Systems</strong>, and <strong>Financial Logic</strong>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="text-center py-5 border-top" style="border-color: #1a1a1a !important; margin-top: 50px;">
+    <p class="text-secondary m-0">Designed & Built by <span style="color:var(--primary); font-weight:600;">Shashank Gowda NB</span> &copy; <span id="year"></span></p>
+</footer>
+
+<div id="backTop" style="position: fixed; bottom: 30px; right: 30px; background: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #000; cursor: pointer; opacity: 0; transition: 0.3s; z-index: 999; font-size: 1.2rem; box-shadow: 0 10px 30px rgba(232, 185, 35, 0.4);"><i class="bi bi-arrow-up"></i></div>
+
+<div id="cursor"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Init Animations
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('preloader');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.style.display = 'none', 600);
+        
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+        AOS.init({ duration: 800, once: true, offset: 50 });
+        initParticles();
+    });
+
+    // Custom Cursor Logic
+    const cursor = document.getElementById("cursor");
+    document.addEventListener("mousemove", e => {
+        cursor.style.left = e.clientX + "px";
+        cursor.style.top = e.clientY + "px";
+    });
+    
+    document.querySelectorAll('.hover-trigger').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover-active'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover-active'));
+    });
+
+    // Scroll Bar
+    window.addEventListener('scroll', () => {
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById("scrollProgress").style.width = (window.scrollY / height) * 100 + "%";
+        document.getElementById("backTop").style.opacity = window.scrollY > 300 ? '1' : '0';
+    });
+    
+    document.getElementById("backTop").addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Particles Background
+    function initParticles() {
+        tsParticles.load("tsparticles", {
+            fpsLimit: 60,
+            background: { color: "#050505" },
+            particles: {
+                number: { value: 30 },
+                color: { value: "#e8b923" },
+                shape: { type: "circle" },
+                opacity: { value: 0.1, random: true },
+                size: { value: 2, random: true },
+                move: { enable: true, speed: 0.5, direction: "top", outModes: "out" }
+            }
+        });
+    }
+</script>
+</body>
+</html>

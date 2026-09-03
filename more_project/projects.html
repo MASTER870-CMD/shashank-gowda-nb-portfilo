@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project Archive | Shashank Gowda NB</title>
+<meta name="description" content="Premium Project Archive of Shashank Gowda NB. Built with performance and UX in mind.">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.11.1/tsparticles.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.0/vanilla-tilt.min.js"></script>
+
+<style>
+    /* =========================================
+       1. VARIABLES & RESET
+       ========================================= */
+    :root {
+        --primary: #e8b923;
+        --primary-glow: rgba(232, 185, 35, 0.4);
+        --dark-bg: #050505;
+        --card-bg: #0f0f0f;
+        --border-color: #222;
+        --text-muted: #888;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+    
+    body { 
+        font-family: 'Poppins', sans-serif; 
+        background-color: var(--dark-bg); 
+        color: #fff; 
+        overflow-x: hidden; 
+    }
+
+    ::selection { background: var(--primary); color: #000; }
+
+    /* =========================================
+       2. GLOBAL UI ELEMENTS
+       ========================================= */
+    #scrollProgress { position: fixed; top: 0; left: 0; height: 3px; background: var(--primary); width: 0%; z-index: 9999; box-shadow: 0 0 15px var(--primary); }
+    #cursor { position: fixed; width: 20px; height: 20px; border: 2px solid var(--primary); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 10000; transition: transform 0.1s ease; mix-blend-mode: difference; }
+    @media (hover: none) { #cursor { display: none !important; } }
+
+    #preloader { position: fixed; inset: 0; background: var(--dark-bg); z-index: 10001; display: flex; justify-content: center; align-items: center; transition: opacity 0.5s; }
+    .loader-content { text-align: center; }
+    .loader-text { font-size: 2rem; font-weight: 800; color: var(--primary); animation: pulse 1s infinite alternate; }
+
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { from { opacity: 0.6; } to { opacity: 1; } }
+    .animate-card { opacity: 0; animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+    /* =========================================
+       3. NAVBAR & HERO
+       ========================================= */
+    .navbar { background: rgba(5, 5, 5, 0.85); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1rem 0; transition: 0.3s; }
+    .navbar-brand { font-weight: 800; font-size: 1.5rem; color: #fff !important; }
+    .navbar-brand span { color: var(--primary); }
+
+    .archive-hero { padding: 120px 0 30px; text-align: center; }
+    .archive-hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 800; margin-bottom: 15px; line-height: 1.1; letter-spacing: -1px; }
+    .gradient-text { background: linear-gradient(135deg, #fff 40%, var(--primary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .archive-hero p { max-width: 600px; margin: 0 auto 30px; color: #999; }
+
+    .stats-row { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; flex-wrap: wrap; }
+    .stat-item { text-align: center; }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary); display: block; }
+    .stat-label { font-size: 0.85rem; color: #666; text-transform: uppercase; letter-spacing: 1px; }
+
+    /* =========================================
+       4. CONTROL BAR
+       ========================================= */
+    .control-bar { 
+        background: rgba(20, 20, 20, 0.6); backdrop-filter: blur(12px);
+        padding: 20px; border-radius: 16px; border: 1px solid #222; 
+        margin-bottom: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .control-row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+    .search-wrapper { flex: 1 1 250px; position: relative; }
+    .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #666; }
+    .search-input { background: #0a0a0a; border: 1px solid #333; color: #fff; padding: 12px 20px 12px 40px; border-radius: 12px; width: 100%; transition: 0.3s; font-size: 0.95rem; }
+    .search-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(232, 185, 35, 0.1); outline: none; }
+    .kbd-shortcut { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); border: 1px solid #333; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; color: #666; pointer-events: none; }
+    .controls-wrapper { display: flex; flex-wrap: wrap; gap: 15px; flex: 2 1 400px; justify-content: flex-end; align-items: center; }
+    #filterContainer { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-btn { background: transparent; border: 1px solid #333; color: #ccc; padding: 8px 16px; border-radius: 50px; transition: 0.3s; font-size: 0.85rem; font-weight: 500; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    .filter-btn:hover { border-color: #666; color: #fff; }
+    .filter-btn.active { background: var(--primary); color: #000; border-color: var(--primary); font-weight: 600; }
+    .actions-wrapper { display: flex; gap: 10px; align-items: center; }
+    .form-select { background-color: #0a0a0a !important; color: #fff !important; border: 1px solid #333 !important; cursor: pointer; width: auto; font-size: 0.9rem; padding: 8px 35px 8px 15px; border-radius: 10px; }
+    .btn-group .btn { border-color: #333; padding: 8px 14px; }
+    .btn-group .btn.active { background-color: var(--primary); color: #000; border-color: var(--primary); }
+
+    /* =========================================
+       5. PROJECT CARDS
+       ========================================= */
+    .project-card { background: var(--card-bg); border: 1px solid #222; border-radius: 16px; overflow: hidden; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); height: 100%; display: flex; flex-direction: column; position: relative; }
+    .project-card:hover { transform: translateY(-8px); border-color: #444; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+    .card-img-wrapper { position: relative; overflow: hidden; width: 100%; flex-shrink: 0; aspect-ratio: 16 / 9; background-color: #000; }
+    .bg-blur { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(25px) brightness(0.5); transform: scale(1.2); z-index: 1; }
+    .main-img { position: relative; width: 100%; height: 100%; object-fit: contain; object-position: center; z-index: 2; transition: transform 0.6s ease; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
+    .project-card:hover .main-img { transform: scale(1.03); }
+    .card-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; gap: 15px; backdrop-filter: blur(4px); z-index: 5; }
+    .project-card:hover .card-overlay { opacity: 1; }
+    .overlay-btn { width: 45px; height: 45px; border-radius: 50%; background: #fff; color: #000; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; text-decoration: none; transition: 0.3s; cursor: pointer;}
+    .overlay-btn:hover { transform: scale(1.1); background: var(--primary); }
+
+    .card-body { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; z-index: 2; background: var(--card-bg); position: relative; }
+    .card-title { font-size: 1.3rem; font-weight: 700; color: #fff; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .tech-wrapper { margin-bottom: 12px; }
+    .tech-badge { font-size: 0.75rem; background: rgba(255,255,255,0.05); color: #bbb; padding: 4px 10px; border-radius: 6px; margin-right: 5px; display: inline-block; border: 1px solid #222; margin-bottom: 5px; }
+    .card-text { color: #888; font-size: 0.9rem; margin-bottom: 20px; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .card-footer-custom { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #1a1a1a; margin-top: auto; }
+    
+    @keyframes pop { 50% { transform: scale(1.4); } }
+    .like-btn { cursor: pointer; color: #666; transition: 0.3s; display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.9rem; }
+    .like-btn:hover { color: #fff; }
+    .like-btn.liked { color: #ef4444; }
+    .like-btn.liked i { animation: pop 0.3s ease; }
+    .like-btn i.bi-heart-fill { display: none; }
+    .like-btn.liked i.bi-heart-fill { display: inline-block; }
+    .like-btn.liked i.bi-heart { display: none; }
+
+    /* =========================================
+       6. MODAL & TOAST
+       ========================================= */
+    .modal-content { background: #111; border: 1px solid #333; color: #fff; border-radius: 16px; box-shadow: 0 0 50px rgba(0,0,0,0.8); }
+    .modal-header, .modal-footer { border-color: #222; }
+    .close-modal { color: #fff; background: none; border: none; font-size: 2rem; line-height: 1; padding: 0 1rem; transition: 0.3s; }
+    .close-modal:hover { color: var(--primary); transform: rotate(90deg); }
+    .toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 10002; }
+    .custom-toast { background: #111; border: 1px solid #222; border-left: 4px solid var(--primary); color: #fff; padding: 16px 24px; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: translateX(150%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 15px; font-weight: 500; }
+    .custom-toast.show { transform: translateX(0); }
+    .pagination-container { display: flex; justify-content: center; margin-top: 60px; gap: 10px; }
+    .page-btn { background: #111; border: 1px solid #222; color: #fff; width: 45px; height: 45px; display: flex; justify-content: center; align-items: center; border-radius: 12px; cursor: pointer; transition: 0.3s; font-weight: 600; }
+    .page-btn:hover { background: #222; border-color: #444; }
+    .page-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+    /* =========================================
+       7. MOBILE RESPONSIVENESS
+       ========================================= */
+    @media (max-width: 768px) {
+        .archive-hero { padding: 90px 0 30px; }
+        .kbd-shortcut { display: none; }
+        .control-bar { padding: 16px; margin-bottom: 25px; }
+        .control-row { flex-direction: column; align-items: stretch; gap: 12px; }
+        .search-wrapper { flex: 0 0 auto !important; width: 100%; }
+        .controls-wrapper { width: 100%; flex: 0 0 auto !important; flex-direction: column; gap: 12px; align-items: stretch; }
+        #filterContainer { width: 100%; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; margin-bottom: 0; justify-content: flex-start; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        #filterContainer::-webkit-scrollbar { display: none; } 
+        .actions-wrapper { width: 100%; justify-content: space-between; }
+        .projects-container.list-view .project-card { flex-direction: column; }
+        .projects-container.list-view .card-img-wrapper { width: 100%; aspect-ratio: 16/9; height: auto; }
+        .projects-container.list-view .bg-blur { display: block; } 
+        .projects-container.list-view .card-body { width: 100%; }
+        .toast-container { right: 50%; transform: translateX(50%); width: 90%; bottom: 20px; }
+    }
+
+    @media (min-width: 769px) {
+        .projects-container.list-view .col-md-4 { width: 100%; max-width: 100%; flex: 0 0 100%; }
+        .projects-container.list-view .project-card { flex-direction: row; min-height: 260px; }
+        .projects-container.list-view .card-img-wrapper { width: 35%; aspect-ratio: auto; min-height: 100%; }
+        .projects-container.list-view .card-body { width: 65%; justify-content: center; }
+    }
+</style>
+</head>
+<body>
+
+<div id="scrollProgress"></div>
+<div id="cursor"></div>
+<div id="preloader"><div class="loader-content"><div class="loader-text">Shashank.</div></div></div>
+<div id="tsparticles" style="position: fixed; inset: 0; z-index: -1;"></div>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="https://shashankgowdanb.netlify.app/">Shashank<span>.</span></a>
+        <a href="https://shashankgowdanb.netlify.app/" class="btn btn-sm btn-outline-light ms-auto rounded-pill px-3 fw-bold">
+            <i class="bi bi-arrow-left me-1"></i> Portfolio
+        </a>
+    </div>
+</nav>
+
+<section class="archive-hero container">
+    <h1 data-aos="fade-up">Project <span class="gradient-text typing">Archive</span></h1>
+    <p>Premium collection of coding experiments, AI tools, and full-stack applications.</p>
+    
+    <div class="stats-row">
+        <div class="stat-item">
+            <span class="stat-number" id="stat-total" data-target="0">0</span>
+            <span class="stat-label">Projects</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" id="stat-ai" data-target="0">0</span>
+            <span class="stat-label">AI Models</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="8000">0</span>
+            <span class="stat-label">Lines of Code</span>
+        </div>
+    </div>
+</section>
+
+<section class="container mb-5">
+    <div class="control-bar">
+        <div class="control-row">
+            <div class="search-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="searchInput" class="search-input" placeholder="Search projects...">
+                <span class="kbd-shortcut">/</span>
+            </div>
+            <div class="controls-wrapper">
+                <div id="filterContainer">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="ai">AI / ML</button>
+                    <button class="filter-btn" data-filter="web">Web Dev</button>
+                    <button class="filter-btn" data-filter="tools">Tools</button>
+                </div>
+                <div class="actions-wrapper">
+                    <select id="sortSelect" class="form-select">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="az">Name (A-Z)</option>
+                    </select>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary active" id="gridViewBtn"><i class="bi bi-grid-fill"></i></button>
+                        <button class="btn btn-outline-secondary" id="listViewBtn"><i class="bi bi-list-ul"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3 text-end text-secondary small">
+            Displaying <span id="countDisplay" class="text-white fw-bold">0</span> projects
+        </div>
+    </div>
+
+    <div class="row g-4 projects-container" id="projectsGrid"></div>
+    <div class="pagination-container" id="pagination"></div>
+</section>
+
+<footer class="text-center py-5 border-top" style="border-color: #1a1a1a !important; margin-top: 80px;">
+    <p class="text-secondary m-0">Designed & Built by <span style="color:var(--primary); font-weight:600;">Shashank Gowda</span> &copy; <span id="year"></span></p>
+</footer>
+
+<div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold" id="modalTitle">Project Title</h5>
+                <button type="button" class="close-modal" data-bs-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="position-relative mb-4">
+                    <img id="modalImg" src="" class="img-fluid rounded w-100" style="max-height: 400px; object-fit: contain; background: #000; border: 1px solid #333;">
+                </div>
+                <p id="modalDesc" class="text-secondary mb-4" style="line-height: 1.7;">Description...</p>
+                <div class="mb-4"><strong class="text-white d-block mb-2">Technologies Used:</strong><div id="modalTech"></div></div>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a id="modalLive" href="#" target="_blank" class="btn btn-warning fw-bold px-4">Live Demo</a>
+                    <a id="modalCode" href="#" target="_blank" class="btn btn-outline-light px-4">Source Code</a>
+                    <button class="btn btn-outline-secondary ms-auto" onclick="copyProjectLink()"><i class="bi bi-share me-2"></i> Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="backTop" style="position: fixed; bottom: 30px; right: 30px; background: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #000; cursor: pointer; opacity: 0; transition: 0.3s; z-index: 999; font-size: 1.2rem; box-shadow: 0 10px 30px rgba(232, 185, 35, 0.4);"><i class="bi bi-arrow-up"></i></div>
+
+<div class="toast-container">
+    <div id="toast" class="custom-toast">
+        <i class="bi bi-check-circle-fill" style="color: var(--primary); font-size: 1.2rem;"></i>
+        <span>Action Successful!</span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyA4LhiPxPfj-b7vcHyZxB444SFf1bLwKwk",
+        authDomain: "my-profile-shashank.firebaseapp.com",
+        projectId: "my-profile-shashank",
+        storageBucket: "my-profile-shashank.firebasestorage.app",
+        messagingSenderId: "109306903401",
+        appId: "1:109306903401:web:b5e010a17524aa1ac15bf8"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let state = { projects: [], filter: 'all', search: '', sort: 'newest', view: 'grid', page: 1, perPage: 6 };
+
+    window.addEventListener('load', async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, "projects"));
+            let fetchedProjects = [];
+            
+            querySnapshot.forEach((doc) => {
+                fetchedProjects.push({ id: doc.id, ...doc.data() });
+            });
+            
+            state.projects = fetchedProjects;
+
+            // Remove Preloader
+            document.getElementById('preloader').style.opacity = '0';
+            setTimeout(() => document.getElementById('preloader').style.display = 'none', 500);
+            document.getElementById('year').textContent = new Date().getFullYear();
+            
+            initParticles();
+            initStatsCounter();
+            window.renderProjects(); 
+            initTypeEffect();
+
+        } catch (error) {
+            console.error("Error fetching projects from Firebase:", error);
+            document.querySelector('.loader-text').innerHTML = "Database Error.";
+        }
+    });
+
+    window.renderProjects = function() {
+        const grid = document.getElementById('projectsGrid');
+        grid.innerHTML = '';
+
+        let filtered = state.projects.filter(p => {
+            const matchesCategory = state.filter === 'all' || p.category === state.filter;
+            // Safely handle missing descriptions or titles
+            const titleStr = p.title ? p.title.toLowerCase() : '';
+            const descStr = p.desc ? p.desc.toLowerCase() : '';
+            const matchesSearch = titleStr.includes(state.search.toLowerCase()) || descStr.includes(state.search.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+
+        if(state.sort === 'newest') filtered.sort((a,b) => new Date(b.date) - new Date(a.date));
+        if(state.sort === 'oldest') filtered.sort((a,b) => new Date(a.date) - new Date(b.date));
+        if(state.sort === 'az') filtered.sort((a,b) => (a.title || '').localeCompare(b.title || ''));
+
+        document.getElementById('countDisplay').textContent = filtered.length;
+
+        const totalPages = Math.ceil(filtered.length / state.perPage);
+        const start = (state.page - 1) * state.perPage;
+        const paginated = filtered.slice(start, start + state.perPage);
+
+        if(paginated.length === 0) {
+            grid.innerHTML = `<div class="col-12 text-center py-5 text-secondary"><h3>No projects found</h3><p>Upload a project via the Admin Panel.</p></div>`;
+        } else {
+            paginated.forEach((p, index) => {
+                const liked = localStorage.getItem(`like_${p.id}`) === 'true' ? 'liked' : '';
+                const techArray = Array.isArray(p.tech) ? p.tech : [];
+                const techHTML = techArray.map(t => `<span class="tech-badge">${t}</span>`).join('');
+                const delay = index * 100;
+
+                const cardHTML = `
+                <div class="col-12 col-md-${state.view === 'grid' ? '4' : '12'} animate-card" style="animation-delay: ${delay}ms;">
+                    <div class="project-card" data-tilt data-tilt-max="3" data-tilt-speed="400">
+                        <div class="card-img-wrapper">
+                            <img src="${p.image}" class="bg-blur" loading="lazy">
+                            <img src="${p.image}" class="main-img" alt="${p.title}" loading="lazy">
+                            <div class="card-overlay">
+                                <a href="${p.live}" target="_blank" class="overlay-btn" title="Live"><i class="bi bi-eye"></i></a>
+                                <a href="${p.code}" target="_blank" class="overlay-btn" title="Code"><i class="bi bi-github"></i></a>
+                                <div class="overlay-btn" onclick="openModal('${p.id}')" title="Details"><i class="bi bi-info-lg"></i></div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">${p.title}</h5>
+                            <div class="tech-wrapper">${techHTML}</div>
+                            <p class="card-text">${p.desc}</p>
+                            <div class="card-footer-custom">
+                                <span class="text-muted small"><i class="bi bi-calendar3 me-1"></i> ${p.date}</span>
+                                <div class="like-btn ${liked}" onclick="toggleLike(this, '${p.id}')">
+                                    <i class="bi bi-heart"></i><i class="bi bi-heart-fill"></i><span>Like</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+                grid.innerHTML += cardHTML;
+            });
+            if(window.VanillaTilt && window.innerWidth > 992) VanillaTilt.init(document.querySelectorAll(".project-card"));
+        }
+        renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+        const container = document.getElementById('pagination');
+        container.innerHTML = '';
+        if(totalPages <= 1) return;
+        for(let i=1; i<=totalPages; i++) {
+            const btn = document.createElement('div');
+            btn.className = `page-btn ${state.page === i ? 'active' : ''}`;
+            btn.innerText = i;
+            btn.onclick = () => { state.page = i; window.renderProjects(); window.scrollTo({top: 300, behavior:'smooth'}); };
+            container.appendChild(btn);
+        }
+    }
+
+    // Interactive Listeners
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            state.filter = e.target.getAttribute('data-filter');
+            state.page = 1;
+            window.renderProjects();
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', (e) => { state.search = e.target.value; state.page = 1; window.renderProjects(); });
+    document.getElementById('sortSelect').addEventListener('change', (e) => { state.sort = e.target.value; window.renderProjects(); });
+    
+    document.getElementById('gridViewBtn').addEventListener('click', () => { 
+        state.view = 'grid'; 
+        document.getElementById('projectsGrid').classList.remove('list-view'); 
+        updateViewBtns(); 
+        window.renderProjects(); 
+    });
+    
+    document.getElementById('listViewBtn').addEventListener('click', () => { 
+        state.view = 'list'; 
+        document.getElementById('projectsGrid').classList.add('list-view'); 
+        updateViewBtns(); 
+        window.renderProjects(); 
+    });
+    
+    function updateViewBtns() { 
+        document.getElementById('gridViewBtn').classList.toggle('active', state.view === 'grid'); 
+        document.getElementById('listViewBtn').classList.toggle('active', state.view === 'list'); 
+    }
+
+    // Attach functions to window so inline HTML triggers can access them
+    window.toggleLike = function(btn, id) {
+        const key = `like_${id}`;
+        const isLiked = localStorage.getItem(key) === 'true';
+        localStorage.setItem(key, !isLiked);
+        btn.classList.toggle('liked');
+        if(!isLiked) showToast("Added to favorites!");
+    }
+
+    window.openModal = function(id) {
+        const p = state.projects.find(x => x.id === id);
+        if(!p) return;
+        document.getElementById('modalTitle').textContent = p.title;
+        document.getElementById('modalDesc').textContent = p.desc;
+        document.getElementById('modalImg').src = p.image;
+        document.getElementById('modalLive').href = p.live;
+        document.getElementById('modalCode').href = p.code;
+        
+        const techArray = Array.isArray(p.tech) ? p.tech : [];
+        document.getElementById('modalTech').innerHTML = techArray.map(t => `<span class="badge bg-secondary me-2 p-2">${t}</span>`).join('');
+        
+        const myModal = new bootstrap.Modal(document.getElementById('projectModal'));
+        myModal.show();
+    }
+
+    window.copyProjectLink = function() {
+        const url = document.getElementById('modalLive').href;
+        navigator.clipboard.writeText(url).then(() => showToast("Project link copied!"));
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.querySelector('span').textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function initStatsCounter() {
+        // Set dynamic values based on fetched data
+        document.getElementById('stat-total').setAttribute('data-target', state.projects.length);
+        const aiCount = state.projects.filter(p => p.category === 'ai').length;
+        document.getElementById('stat-ai').setAttribute('data-target', aiCount);
+
+        const stats = document.querySelectorAll('.stat-number');
+        stats.forEach(stat => {
+            const target = +stat.getAttribute('data-target');
+            const inc = target / 100;
+            const update = () => {
+                const c = +stat.innerText;
+                if(c < target) { stat.innerText = Math.ceil(c + inc); setTimeout(update, 20); } else { stat.innerText = target + (target > 500 ? "+" : ""); }
+            };
+            if(target > 0) update();
+        });
+    }
+
+    function initTypeEffect() {
+        const text = "Archive";
+        const el = document.querySelector('.typing');
+        let i = 0; setInterval(() => { el.textContent = text.substring(0, i + 1); i = (i + 1) % (text.length + 10); }, 300);
+    }
+
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById("scrollProgress").style.width = (winScroll / height) * 100 + "%";
+        document.getElementById("backTop").style.opacity = winScroll > 300 ? '1' : '0';
+    });
+    
+    document.getElementById("backTop").addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Hardware Cursor Logic
+    document.addEventListener("mousemove", e => { 
+        const cursor = document.getElementById("cursor");
+        if(cursor) { cursor.style.left = e.clientX + "px"; cursor.style.top = e.clientY + "px"; }
+    });
+    
+    // Defer hover effects to avoid breaking dynamic elements
+    setInterval(() => {
+        document.querySelectorAll('button, a, .filter-btn, .overlay-btn').forEach(btn => {
+            if(!btn.dataset.hoverBound) {
+                btn.addEventListener('mouseenter', () => { const c = document.getElementById("cursor"); if(c) c.style.transform = 'translate(-50%, -50%) scale(1.5)'; });
+                btn.addEventListener('mouseleave', () => { const c = document.getElementById("cursor"); if(c) c.style.transform = 'translate(-50%, -50%) scale(1)'; });
+                btn.dataset.hoverBound = "true";
+            }
+        });
+    }, 1000);
+
+    function initParticles() {
+        if(window.tsParticles) {
+            tsParticles.load("tsparticles", {
+                fpsLimit: 60,
+                background: { color: "#050505" },
+                particles: {
+                    number: { value: 30 },
+                    color: { value: "#e8b923" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.2, random: true },
+                    size: { value: 2, random: true },
+                    move: { enable: true, speed: 0.8, direction: "top", outModes: "out" }
+                }
+            });
+        }
+    }
+</script>
+</body>
+</html>

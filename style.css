@@ -1,0 +1,140 @@
+
+* { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+body { font-family: 'Poppins', sans-serif; background-color: #0a0a0a; color: #fff; overflow-x: hidden; }
+
+/* Page Loader */
+#pageLoader {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background:#0a0a0a; display:flex; justify-content:center; align-items:center; z-index:9999;
+}
+#pageLoader h1 {
+  font-size:3rem; font-weight:700; color:#e8b923;
+  text-shadow: 0 0 20px #e8b923, 0 0 40px #e8b923, 0 0 60px #fff;
+  animation: glowPulse 1.5s ease-in-out infinite alternate;
+}
+@keyframes glowPulse {
+  0% { text-shadow: 0 0 10px #e8b923, 0 0 20px #e8b923, 0 0 30px #fff; }
+  100% { text-shadow: 0 0 30px #e8b923, 0 0 50px #e8b923, 0 0 70px #fff; }
+}
+
+/* Navbar */
+nav {
+  background: rgba(10,10,10,0.9); position: fixed; top: 0; width: 100%; z-index: 1000;
+  padding: 0.8rem 1rem; box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); backdrop-filter: blur(8px); transition: 0.3s;
+}
+nav.scrolled { background: rgba(10,10,10,0.95); box-shadow: 0 0 20px rgba(232,185,35,0.3); }
+nav a { color: #ccc; text-decoration: none; margin: 0 1rem; font-weight: 500; transition: 0.3s; }
+nav a:hover { color: #e8b923; }
+.navbar-brand { color: #e8b923 !important; font-weight: 700; font-size: 1.4rem; letter-spacing: 1px; }
+
+/* Hero */
+#hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; text-align: center; background: radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%); padding: 0 1rem; position: relative; overflow: hidden; }
+#hero::after {
+  content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: conic-gradient(from 90deg, #e8b92333, transparent 70%);
+  animation: rotate 6s linear infinite; z-index: 0;
+}
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+#hero-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 3rem; text-align: left; }
+.hero-photo { width: 220px; height: 220px; border-radius: 50%; border: 4px solid #e8b923; box-shadow: 0 0 30px rgba(232,185,35,0.4); animation: float 4s ease-in-out infinite; transition: transform 0.4s ease; object-fit: cover; }
+.hero-photo:hover { transform: scale(1.05); }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+#hero-text { max-width: 500px; }
+#hero h1 { font-size: 3rem; font-weight: 700; animation: fadeInUp 1s ease; }
+#hero span { color: #e8b923; }
+#hero p { color: #bbb; font-size: 1.1rem; margin-top: 1rem; }
+#hero .btn-custom { margin-top: 2rem; background: #e8b923; color: #000; padding: 0.7rem 2rem; border: none; border-radius: 30px; font-weight: 600; transition: 0.3s; }
+#hero .btn-custom:hover { background: #fff; color: #000; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+
+/* About */
+#about { padding: 100px 0; background: #121212; }
+#about img { width: 100%; border-radius: 20px; box-shadow: 0 0 25px rgba(232,185,35,0.2); transition: transform 0.4s ease; }
+#about img:hover { transform: scale(1.05); }
+#about h2 { color: #e8b923; margin-bottom: 1rem; font-weight: 700; }
+#about p { color: #ccc; }
+.skill-badge { background: #1f1f1f; color: #e8b923; border: 1px solid #333; padding: 8px 15px; border-radius: 20px; margin: 5px; display: inline-block; font-size: 0.9rem; transition: 0.3s; }
+.skill-badge:hover { background: #e8b923; color: #000; transform: translateY(-3px); }
+
+/* Projects */
+#projects { padding: 100px 0; background: #0f0f0f; }
+#projects h2 { color: #e8b923; margin-bottom: 2rem; font-weight: 700; text-align:center; }
+.card { background: #181818; border: none; border-radius: 15px; transition: 0.3s; overflow: hidden; }
+.card img { transition: transform 0.4s ease; }
+.card:hover img { transform: scale(1.05); }
+.card:hover { transform: translateY(-6px); box-shadow: 0 0 20px rgba(232,185,35,0.3); }
+.card-title { color: #e8b923; }
+.btn-project { background: #e8b923; border: none; color: #000; font-weight: 600; border-radius: 25px; padding: 6px 14px; transition: 0.3s; }
+.btn-project:hover { background: #fff; }
+
+/* Contact */
+#contact { padding: 100px 0; background: #121212; text-align: center; }
+#contact h2 { color: #e8b923; margin-bottom: 1rem; }
+#contact p { color: #ccc; }
+.social-icons a { color: #e8b923; margin: 0 10px; font-size: 1.8rem; transition: 0.3s; }
+.social-icons a:hover { color: #fff; transform: translateY(-5px); }
+
+/* Footer */
+footer { background: #0a0a0a; text-align: center; padding: 20px 0; color: #555; font-size: 0.9rem; border-top: 1px solid #1a1a1a; }
+
+/* Cursor Glow */
+#cursor { position: fixed; width: 25px; height: 25px; border: 2px solid #e8b923; border-radius: 50%; pointer-events: none; transition: 0.05s; z-index: 2000; mix-blend-mode: difference; }
+
+/* Back to Top */
+#backTop { position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #e8b923; color: #000; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; cursor: pointer; opacity: 0; transition: 0.3s; z-index: 1500; }
+#backTop:hover { transform: scale(1.1); }
+
+
+
+/* Make navbar links white */
+.nav-link {
+  color: #ffffff !important;
+}
+
+.nav-link.active {
+  color: var(--gold) !important; /* keep active link gold */
+}
+
+.nav-link:hover {
+  color: #ffffff !important; /* white on hover */
+}
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  #hero h1 { font-size: 2.2rem; text-align: center; }
+  #hero-content { flex-direction: column; text-align: center; }
+  #hero-text { text-align: center; }
+  .hero-photo { width: 180px; height: 180px; }
+  #about .row { text-align: center; }
+  #about img { margin-bottom: 1.5rem; }
+}
+@media (max-width: 480px) {
+  #hero h1 { font-size: 1.8rem; }
+  #hero p { font-size: 1rem; }
+}
+
+/* img size of projects starts */
+/* Ensure all project images are the same size */
+#projects .card-img-top {
+  width: 100%;          /* Take full width of the card */
+  height: 500px;        /* Fixed height for all cards */
+  object-fit: cover;    /* Maintain aspect ratio, crop if needed */
+  border-radius: 10px;  /* Optional: match card radius */
+}
+
+/* Optional: make hero photo uniform */
+.hero-photo {
+  width: 220px;         /* fixed width */
+  height: 220px;        /* fixed height */
+  object-fit: cover;    /* keeps aspect ratio */
+}
+
+/* Optional: About section image */
+#about img {
+  width: 100%;
+  max-height: 300px;    /* set maximum height */
+  object-fit: cover;
+  border-radius: 20px;
+}
+
