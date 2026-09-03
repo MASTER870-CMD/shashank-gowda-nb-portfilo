@@ -94,13 +94,13 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* 2. Center Column: Pure Clean Text Links (No Pill Borders, No Robotic Boxes) */}
+        {/* 2. Center Column: Pure Clean Text Links with Animated White Underline Hover */}
         <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-8 z-0">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.label}
               href={getHref(item)}
-              className="text-sm font-sans font-medium text-neutral-400 hover:text-white transition-colors duration-300 tracking-normal"
+              className="relative text-[13px] uppercase tracking-[0.1em] font-semibold text-neutral-400 hover:text-white transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1.5 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-300 hover:after:w-full"
             >
               {item.label}
             </Link>
