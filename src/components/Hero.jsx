@@ -2,146 +2,148 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ShieldCheck, Cpu, Database, Server, Layers, Terminal, ArrowRight, Download, CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { ArrowRight, Cpu } from 'lucide-react';
 
 export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen pt-32 pb-20 flex items-center justify-center overflow-hidden bg-obsidian-950 bg-grid-pattern"
+      className="relative min-h-[92vh] pt-32 pb-24 flex items-center justify-center overflow-hidden bg-[#050505]"
     >
-      {/* Anti-Gravity Gold Radial Aura (Zero purple) */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[650px] bg-radial-gold-glow pointer-events-none -z-10" />
-      <div className="absolute top-1/4 -left-48 w-96 h-96 bg-gold/5 rounded-full blur-3xl pointer-events-none -z-10" />
-      <div className="absolute bottom-10 -right-48 w-96 h-96 bg-gold/5 rounded-full blur-3xl pointer-events-none -z-10" />
+      {/* Subtle, soft atmospheric lighting (Dark Gold/Amber glowing orb behind text) */}
+      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] bg-yellow-900/10 rounded-full blur-[130px] pointer-events-none -z-10" />
+      <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-amber-950/10 rounded-full blur-[140px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24 relative z-10 w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
+      <div className="max-w-[1300px] mx-auto px-6 md:px-10 relative z-10 w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Main Content Column */}
-          <div className="lg:col-span-7 text-left space-y-6 sm:space-y-8">
+          <div className="lg:col-span-7 text-left">
             
-            {/* Enterprise Status Pill */}
-            <div className="inline-flex items-center justify-center gap-2.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-neutral-800 shadow-sm w-full sm:w-auto text-center">
-              <span className="w-2 h-2 rounded-full bg-gold animate-ping shrink-0"></span>
-              <span className="text-[10px] sm:text-xs font-mono text-gold-light tracking-wide uppercase font-semibold whitespace-normal">
-                Available for Architecture Advisory & Consulting
-              </span>
-            </div>
-
-            {/* Candidate Identity & Title */}
-            <div>
-              <div className="text-xs sm:text-sm font-mono uppercase tracking-[0.25em] text-neutral-400 mb-2">
-                Candidate Profile
-              </div>
-              <h2 className="text-3xl sm:text-4xl font-heading font-extrabold text-white tracking-tight">
-                Shashank Gowda NB
-              </h2>
-              <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 text-base sm:text-xl font-mono text-gold font-medium">
-                <span>AI Engineer & Systems Architect</span>
-                <span className="hidden sm:inline text-neutral-500">|</span>
-                <span className="text-xs px-2.5 py-0.5 rounded bg-gold/10 border border-gold/30 text-gold-light uppercase tracking-wider shrink-0">
-                  Bengaluru, IN
+            {/* Top Badges (Soft, Borderless Glass Effect) */}
+            <div className="flex flex-wrap items-center gap-3 mb-8">
+              {/* Availability Status Badge */}
+              <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-white/5 backdrop-blur-md text-neutral-300 text-xs font-sans">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
                 </span>
+                <span>Available for Architecture Advisory & Consulting</span>
+              </div>
+
+              {/* Location Badge */}
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 backdrop-blur-md text-neutral-400 text-xs font-sans">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]"></span>
+                <span>Bengaluru, IN</span>
               </div>
             </div>
 
-            {/* Exact Headline */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white tracking-tight leading-tight">
-              Architecting Scalable <span className="text-gold-gradient">Software & AI Ecosystems.</span>
+            {/* Candidate Identity (Human, Clean Sans-Serif) */}
+            <div className="mb-6">
+              <div className="text-xs uppercase tracking-wider text-neutral-400 font-sans font-medium mb-1.5">
+                Principal Systems Architect &bull; AI Engineer
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-sans font-semibold text-white tracking-tight">
+                Shashank Gowda <span className="text-[#C5A059]">NB</span>
+              </h2>
+            </div>
+
+            {/* Main Headline (Tight tracking, elegant white-to-neutral gradient) */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-sans font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-100 to-neutral-500 leading-[1.08] mb-8">
+              Architecting Scalable <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#DFBF77] to-[#C5A059]">Software & AI Ecosystems.</span>
             </h1>
 
-            {/* Exact Bio */}
-            <p className="text-sm sm:text-base md:text-lg text-neutral-300 leading-relaxed font-light max-w-2xl border-l-2 border-gold/40 pl-4 py-1">
-              "I engineer production-grade enterprise software, high-throughput REST/gRPC APIs, cross-platform applications, and distributed backend architectures. From low-level Linux systems and network protocols to deploying deep learning models on AWS, I build fault-tolerant ecosystems designed for scale and zero latency."
+            {/* Bio Text (Clean, readable, generous line-height, text-neutral-400) */}
+            <p className="text-base sm:text-lg text-neutral-400 leading-relaxed font-normal max-w-2xl mb-10">
+              I engineer production-grade enterprise software, high-throughput REST/gRPC APIs, cross-platform applications, and distributed backend architectures. From low-level Linux systems and network protocols to deploying deep learning models on AWS, I build fault-tolerant ecosystems designed for scale and zero downtime.
             </p>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-4 pt-2">
-              <a
-                href="#projects"
-                className="w-full sm:w-auto justify-center px-7 py-3.5 rounded-xl bg-gold text-obsidian-950 font-heading font-bold text-xs sm:text-sm tracking-wide uppercase hover:bg-white hover:shadow-[0_0_35px_rgba(212,175,55,0.5)] transition-all duration-300 flex items-center gap-2 group text-center"
+            {/* Primary & Secondary Actions (Generous Spacing, Human-crafted feel) */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mb-12">
+              <Link
+                href="/projects"
+                className="px-7 py-3.5 rounded-full bg-gradient-to-r from-[#C5A059] to-[#DFBF77] text-[#050505] font-sans font-semibold text-sm hover:opacity-90 transition-all duration-300 shadow-[0_4px_20px_rgba(197,160,89,0.25)] flex items-center justify-center gap-2 group"
               >
                 <span>Explore Engineering Grid</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform shrink-0" />
-              </a>
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
 
-              <a
-                href="#contact"
-                className="w-full sm:w-auto justify-center px-7 py-3.5 rounded-xl bg-white/[0.03] border border-white/15 text-white font-heading font-semibold text-xs sm:text-sm tracking-wide hover:border-gold hover:bg-gold/5 transition-all duration-300 flex items-center gap-2 text-center"
+              <Link
+                href="/contact"
+                className="px-7 py-3.5 rounded-full bg-white/5 hover:bg-white/10 text-neutral-200 font-sans font-medium text-sm transition-all duration-300 backdrop-blur-md flex items-center justify-center gap-2"
               >
                 <span>Request Architectural Review</span>
-              </a>
+              </Link>
             </div>
 
-            {/* Systems Performance SLA Bar */}
-            <div className="pt-6 border-t border-white/10 flex flex-wrap justify-between gap-4 sm:gap-6 max-w-lg">
-              <div className="min-w-[80px]">
-                <div className="text-2xl sm:text-3xl font-heading font-bold text-white">
-                  &lt;10<span className="text-gold text-lg">ms</span>
+            {/* Metrics & Benchmarks (Clean Spacing, No Harsh Dividing Lines) */}
+            <div className="flex flex-wrap items-center gap-8 sm:gap-14 pt-2">
+              <div>
+                <div className="text-2xl sm:text-3xl font-sans font-bold text-white tracking-tight flex items-baseline gap-0.5">
+                  <span>&lt;10</span>
+                  <span className="font-mono text-sm font-normal text-neutral-400">ms</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400 mt-0.5">
+                <div className="text-xs text-neutral-400 font-sans mt-0.5">
                   P99 API Latency
                 </div>
               </div>
-              <div className="min-w-[80px]">
-                <div className="text-2xl sm:text-3xl font-heading font-bold text-white">
-                  99.99<span className="text-gold text-lg">%</span>
+
+              <div>
+                <div className="text-2xl sm:text-3xl font-sans font-bold text-white tracking-tight flex items-baseline gap-0.5">
+                  <span>99.99</span>
+                  <span className="font-mono text-sm font-normal text-neutral-400">%</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400 mt-0.5">
+                <div className="text-xs text-neutral-400 font-sans mt-0.5">
                   High Availability SLA
                 </div>
               </div>
-              <div className="min-w-[80px]">
-                <div className="text-2xl sm:text-3xl font-heading font-bold text-white">
-                  Zero<span className="text-gold text-lg">DB</span>
+
+              <div>
+                <div className="text-2xl sm:text-3xl font-sans font-bold text-white tracking-tight flex items-baseline gap-0.5">
+                  <span>Zero</span>
+                  <span className="font-mono text-xs font-normal text-neutral-400">Downtime</span>
                 </div>
-                <div className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-neutral-400 mt-0.5">
-                  Memory-first Throughput
+                <div className="text-xs text-neutral-400 font-sans mt-0.5">
+                  Blue-Green Deployment
                 </div>
               </div>
             </div>
 
           </div>
 
-          {/* Interactive Systems Terminal & Photo Visual Column */}
-          <div className="lg:col-span-5 relative flex flex-col items-center">
+          {/* Portrait Visual Column (Borderless, Soft Shadow, Natural Background Blend) */}
+          <div className="lg:col-span-5 relative flex justify-center lg:justify-end">
             
-            {/* Anti-Gravity Floating Card Wrapper */}
-            <div className="floating-card float-delay-0 w-full max-w-md">
-              
-              {/* Profile Card with Subtle Glass Frame */}
-              <div className="relative rounded-3xl p-3 bg-obsidian-900/60 border border-neutral-800 backdrop-blur-xl">
-                
-                {/* Photo container */}
-                <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden bg-obsidian-900 border border-white/5 group">
-                  <Image
-                    src="/images/shashank-gowda-nb.jpg"
-                    alt="Shashank Gowda NB - Principal Systems Architect"
-                    fill
-                    priority
-                    sizes="(max-width: 768px) 100vw, 450px"
-                    className="object-cover object-top transition-transform duration-500 ease-out group-hover:scale-102"
-                  />
+            {/* Image Container with Diffuse Shadow & Bottom Blend */}
+            <div className="relative w-full max-w-[380px] sm:max-w-[420px] aspect-[4/5] rounded-3xl overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.85)] group">
+              <Image
+                src="/images/shashank-gowda-nb.jpg"
+                alt="Shashank Gowda NB - Principal Systems Architect"
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 420px"
+                className="object-cover object-top transition-transform duration-700 ease-out group-hover:scale-105"
+              />
 
-                  {/* Anti-Gravity floating badge on photo */}
-                  <div className="absolute bottom-4 left-4 right-4 p-4 rounded-xl bg-obsidian-900/90 backdrop-blur-md border border-gold/30">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="text-xs font-mono uppercase text-gold font-semibold tracking-wider">
-                          Core Architect Engine
-                        </div>
-                        <div className="text-sm font-heading font-bold text-white mt-0.5">
-                          Enterprise Distributed Systems
-                        </div>
-                      </div>
-                      <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/40 flex items-center justify-center text-gold">
-                        <Cpu className="w-4 h-4" />
-                      </div>
+              {/* Subtle bottom gradient mask so it blends naturally into the obsidian background */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/20 to-transparent opacity-80 pointer-events-none" />
+
+              {/* Soft, Borderless Glass Floating Pill at bottom */}
+              <div className="absolute bottom-5 left-5 right-5 p-4 rounded-2xl bg-black/40 backdrop-blur-xl text-neutral-200">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="text-[11px] font-sans uppercase tracking-wider text-[#DFBF77] font-medium">
+                      Core Architect Engine
+                    </div>
+                    <div className="text-sm font-sans font-semibold text-white mt-0.5">
+                      Enterprise Distributed Systems
                     </div>
                   </div>
+                  <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-[#DFBF77]">
+                    <Cpu className="w-4 h-4" />
+                  </div>
                 </div>
-
               </div>
 
             </div>
