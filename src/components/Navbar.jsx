@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Terminal, Menu, X, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Terminal, Menu, X, ArrowUpRight } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'System Spec', hash: '#hero' },
@@ -63,7 +63,7 @@ export default function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         scrolled
           ? 'bg-obsidian-950/85 backdrop-blur-2xl border-b border-white/[0.07] shadow-[0_8px_32px_rgba(0,0,0,0.8)]'
-          : 'bg-obsidian-950/50 backdrop-blur-xl border-b border-white/[0.04]'
+          : 'bg-obsidian-950/40 backdrop-blur-xl border-b border-white/[0.04]'
       }`}
     >
       {/* Luxurious Top Gold Horizon Hairline */}
@@ -80,7 +80,7 @@ export default function Navbar() {
           >
             {/* Obsidian Glass Icon Badge with Gold Rim Glow */}
             <div className="relative">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-b from-neutral-900 via-obsidian-900 to-obsidian-950 border border-gold/40 flex items-center justify-center text-gold shadow-[0_0_20px_rgba(212,175,55,0.18),inset_0_1px_1px_rgba(255,255,255,0.15)] group-hover:border-gold group-hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] group-hover:scale-105 transition-all duration-300">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-neutral-800 via-obsidian-900 to-black border border-gold/40 flex items-center justify-center text-gold shadow-[0_0_20px_rgba(212,175,55,0.2),inset_0_1px_1px_rgba(255,255,255,0.15)] group-hover:border-gold group-hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] group-hover:scale-105 transition-all duration-300">
                 <Terminal className="w-4 h-4 sm:w-5 sm:h-5 text-gold" />
               </div>
               <div className="absolute inset-0 rounded-xl bg-gold/20 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -101,13 +101,13 @@ export default function Navbar() {
         </div>
 
         {/* 2. Center Column: Luxury Floating Glass Capsule Nav Dock */}
-        <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center p-1.5 rounded-full bg-white/[0.03] border border-white/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.06)] backdrop-blur-xl z-0">
+        <nav className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center p-1.5 rounded-full bg-obsidian-950/70 border border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.7),inset_0_1px_1px_rgba(255,255,255,0.08)] backdrop-blur-2xl z-0">
           <div className="flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <Link
                 key={item.label}
                 href={getHref(item)}
-                className="relative px-3.5 xl:px-4 py-2 rounded-full text-[11px] xl:text-xs font-mono uppercase tracking-[0.14em] text-neutral-300 hover:text-gold hover:bg-white/[0.05] transition-all duration-300"
+                className="relative px-3.5 xl:px-4 py-1.5 rounded-full text-[11px] xl:text-xs font-mono uppercase tracking-[0.14em] text-neutral-300 hover:text-white transition-all duration-300 group hover:bg-white/[0.08]"
               >
                 {item.label}
               </Link>
@@ -132,7 +132,7 @@ export default function Navbar() {
           {/* Premium Metallic Gold Ingot Action Button */}
           <Link
             href={isHomePage ? '#contact' : '/#contact'}
-            className="relative group overflow-hidden px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#D4AF37] via-[#F4D068] to-[#C59B27] text-obsidian-950 font-heading font-bold text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(212,175,55,0.35),inset_0_1px_0_rgba(255,255,255,0.5)] hover:shadow-[0_0_40px_rgba(212,175,55,0.65)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shrink-0 whitespace-nowrap flex items-center gap-1.5"
+            className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-[#F4D068] to-[#C59B27] text-obsidian-950 font-heading font-bold text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(212,175,55,0.35),inset_0_1px_1px_rgba(255,255,255,0.5)] hover:shadow-[0_0_40px_rgba(212,175,55,0.65)] hover:scale-105 active:scale-95 transition-all duration-300 shrink-0 whitespace-nowrap flex items-center gap-1.5"
           >
             {/* Metallic Gloss Shimmer Sweep */}
             <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />

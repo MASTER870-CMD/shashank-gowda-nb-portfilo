@@ -8,10 +8,9 @@ import {
   Cloud, 
   ShieldCheck, 
   Check, 
-  Workflow, 
-  Database,
-  Terminal,
-  Cpu
+  Cpu,
+  Sparkles,
+  Zap
 } from 'lucide-react';
 
 const SKILL_DOMAINS = [
@@ -20,16 +19,18 @@ const SKILL_DOMAINS = [
     category: 'AI & Data Engineering',
     icon: BrainCircuit,
     delayClass: 'float-delay-0',
-    description: 'Deep neural networks, model inference optimization, and massive relational data pipelines.',
+    description: 'Deep neural networks, model inference optimization, vector indexing, and massive relational data pipelines.',
     technologies: [
-      { name: 'Python', role: 'Primary ML/AI Language & Scripting' },
-      { name: 'TensorFlow', role: 'Deep Learning & Neural Network Graphs' },
+      { name: 'Python', role: 'Primary ML/AI Language & Production Scripting' },
+      { name: 'PyTorch & HuggingFace', role: 'Transformer Fine-Tuning & Weight Quantization' },
+      { name: 'TensorFlow', role: 'Deep Learning Graphs & Neural Architecture' },
+      { name: 'Vector DBs & RAG', role: 'FAISS, Pinecone & Semantic Embedding Pipelines' },
       { name: 'Advanced SQL', role: 'Complex Window Functions, Indexing & Query Tuning' }
     ],
     architectureHighlights: [
-      'Model Weight Quantization',
-      'Real-time Inference Pipelines',
-      'High-throughput Data Ingestion'
+      'Model Weight Quantization (8-bit / 4-bit INT)',
+      'Real-time Low-Latency Inference Pipelines',
+      'High-throughput Data Ingestion Streams'
     ]
   },
   {
@@ -37,11 +38,13 @@ const SKILL_DOMAINS = [
     category: 'Core Backend & API Architecture',
     icon: Server,
     delayClass: 'float-delay-1',
-    description: 'High-concurrency microservices, memory-efficient systems programming, and enterprise backbones.',
+    description: 'High-concurrency microservices, memory-efficient systems programming, and fault-tolerant enterprise backbones.',
     technologies: [
-      { name: 'Node.js', role: 'Non-blocking Event-Driven Microservices' },
+      { name: 'Node.js & Express', role: 'Non-blocking Event-Driven Microservices' },
       { name: 'C++', role: 'Low-latency Algorithms & Performance Critical Code' },
-      { name: 'Java', role: 'Enterprise Class Multi-threaded Architectures' }
+      { name: 'Java & Spring', role: 'Enterprise Class Multi-threaded Architectures' },
+      { name: 'gRPC & Protobuf', role: 'High-Throughput Microsecond RPC Contracts' },
+      { name: 'Redis & Caching', role: 'Sub-millisecond In-Memory Store & Distributed Locks' }
     ],
     architectureHighlights: [
       'REST, GraphQL & gRPC API Contracts',
@@ -64,9 +67,9 @@ const SKILL_DOMAINS = [
       { name: 'Vite / Turbopack', role: 'High-Speed Module Bundling & HMR Optimization' }
     ],
     architectureHighlights: [
-      'Zero Render-blocking Hydration',
-      'Reverse Proxy API Rewriting',
-      'Ultra-fast First Contentful Paint'
+      'Zero Render-blocking Hydration Strategy',
+      'Reverse Proxy API Rewriting & Edge Routing',
+      'Ultra-fast First Contentful Paint (<1.2s)'
     ]
   },
   {
@@ -74,16 +77,18 @@ const SKILL_DOMAINS = [
     category: 'Cloud & DevOps',
     icon: Cloud,
     delayClass: 'float-delay-3',
-    description: 'Resilient cloud infrastructure, automated deployment pipelines, and low-latency networking.',
+    description: 'Resilient cloud infrastructure, automated deployment pipelines, and low-latency global networking.',
     technologies: [
-      { name: 'AWS', role: 'Cloud Compute, S3, RDS, ALB & Scalable VPCs' },
+      { name: 'AWS Cloud', role: 'Compute (EC2), S3, RDS, ALB & Scalable VPCs' },
       { name: 'Enterprise DevOps', role: 'CI/CD Automation, Containerization & Health Probes' },
-      { name: 'Computer Networks', role: 'TCP/IP, Socket Handshakes, Load Balancing & CDN' }
+      { name: 'Docker & Containers', role: 'Isolated Microservices & Multi-Stage Builds' },
+      { name: 'Computer Networks', role: 'TCP/IP, Socket Handshakes, Load Balancing & CDN' },
+      { name: 'Terraform & IaC', role: 'Declarative Cloud Infrastructure & Reproducibility' }
     ],
     architectureHighlights: [
-      'Zero-Downtime Blue-Green Pipelines',
-      'Multi-Region Availability Design',
-      'Hardened Network ACLs & VPC Subnets'
+      'Zero-Downtime Blue-Green Deployment Pipelines',
+      'Multi-Region Fault-Tolerant Availability Design',
+      'Hardened Network Security Groups & VPC Subnets'
     ]
   },
   {
@@ -91,71 +96,88 @@ const SKILL_DOMAINS = [
     category: 'OS & Security',
     icon: ShieldCheck,
     delayClass: 'float-delay-4',
-    description: 'Kernel-level modifications, Linux systems engineering, offensive hardening, and telemetry hooks.',
+    description: 'Kernel-level modifications, Linux systems engineering, offensive hardening, and real-time telemetry hooks.',
     technologies: [
-      { name: 'Linux', role: 'Kernel Customization & Syscall Tracing' },
-      { name: 'Ubuntu', role: 'Enterprise Production Server Deployments' },
-      { name: 'Kali Linux', role: 'Security Assessment, Hardening & Audit' },
-      { name: 'Ntfy.sh', role: 'Real-time Push Notification & Incident Telemetry' }
+      { name: 'Linux Kernel', role: 'Customization, Syscall Tracing & Resource Limits' },
+      { name: 'Ubuntu Production', role: 'Enterprise Server Provisioning & Service Units' },
+      { name: 'Kali Linux', role: 'Security Assessment, Vulnerability Audit & Hardening' },
+      { name: 'Ntfy.sh Telemetry', role: 'Real-time Push Notification & Incident Monitoring' },
+      { name: 'Zero-Trust Security', role: 'Privilege Separation, JWT Vault & Network ACLs' }
     ],
     architectureHighlights: [
-      'Custom Xubuntu OS Build (Voktra)',
-      'Privilege Separation & Hardening',
-      'Kernel Sysctl Networking Tweaks'
+      'Custom Xubuntu OS Architecture (Voktra OS v2.4)',
+      'Privilege Separation & Root Escalation Defense',
+      'Kernel Sysctl Networking & Buffer Tuning'
     ]
   }
 ];
 
 export default function SkillsMatrix() {
   return (
-    <section id="skills" className="py-28 bg-obsidian-950 relative overflow-hidden">
-      {/* Background Accent Gradients */}
+    <section id="skills" className="py-32 bg-obsidian-950 relative overflow-hidden">
+      {/* Background Ambient Glowing Elements */}
       <div id="tech-matrix" className="scroll-mt-28" />
-      <div className="absolute top-1/2 left-0 w-96 h-96 bg-radial-gold-glow pointer-events-none -z-10" />
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-gold/5 blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-radial-gold-glow pointer-events-none -z-10 opacity-60" />
+      <div className="absolute top-1/2 left-0 w-96 h-96 bg-gold/5 blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute bottom-10 right-0 w-96 h-96 bg-gold/5 blur-[120px] pointer-events-none -z-10" />
 
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-20">
         
-        {/* Section Header */}
+        {/* Section Header with Glowing Pill */}
         <div className="text-center max-w-3xl mx-auto mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-gold/30 text-xs font-mono text-gold uppercase tracking-widest mb-4">
-            <Cpu className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.03] border border-gold/40 text-xs font-mono text-gold uppercase tracking-widest mb-5 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+            <Cpu className="w-3.5 h-3.5 text-gold animate-pulse" />
             <span>Systems Architecture Matrix</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]"></span>
           </div>
+
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-bold text-white tracking-tight">
             High-Throughput <span className="text-gold-gradient">Tech Stack Matrix</span>
           </h2>
-          <p className="mt-4 text-neutral-400 text-base leading-relaxed font-light">
-            Engineered strictly for production resilience, low latency, and distributed intelligence. Zero baseline web trivia—pure architectural capability.
+          
+          <p className="mt-4 text-neutral-400 text-sm sm:text-base leading-relaxed font-light">
+            Engineered strictly for production resilience, low latency, and distributed intelligence. Every system capability is verified for enterprise scalability.
           </p>
         </div>
 
-        {/* 5-Column Grid with Anti-Gravity Staggered Floating */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+        {/* 5-Column Responsive Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 items-stretch">
           {SKILL_DOMAINS.map((domain, index) => {
             const Icon = domain.icon;
+            const isWideBottomCard = index === 3 || index === 4;
+
             return (
               <div
                 key={domain.id}
                 className={`floating-card ${domain.delayClass} ${
-                  index === 3 || index === 4 ? 'lg:col-span-1 md:col-span-1' : ''
+                  isWideBottomCard ? 'lg:col-span-1 md:col-span-1' : ''
                 }`}
               >
-                <div className="h-full rounded-2xl p-6 glass-panel flex flex-col justify-between group hover:border-gold/50 transition-all duration-500">
+                {/* Luxury Glass Card with Ambient Backlight & Horizon Glow */}
+                <div className="relative h-full rounded-3xl p-7 bg-gradient-to-b from-white/[0.04] via-obsidian-900/60 to-obsidian-950/90 border border-white/[0.08] hover:border-gold/50 backdrop-blur-2xl shadow-[0_10px_35px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.08)] hover:shadow-[0_20px_50px_rgba(212,175,55,0.15),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all duration-500 flex flex-col justify-between group overflow-hidden">
                   
+                  {/* Subtle radial gold aura in card corner */}
+                  <div className="absolute -top-24 -right-24 w-52 h-52 bg-gold/10 rounded-full blur-3xl pointer-events-none group-hover:bg-gold/25 transition-all duration-500" />
+                  
+                  {/* Razor-sharp top metallic highlight line */}
+                  <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-gold/50 to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-500" />
+
                   <div>
-                    {/* Header with Icon & Category */}
-                    <div className="flex items-center gap-3.5 mb-5 pb-4 border-b border-white/5">
-                      <div className="w-12 h-12 rounded-xl bg-obsidian-900 border border-gold/30 flex items-center justify-center text-gold group-hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] group-hover:scale-105 transition-all duration-300">
-                        <Icon className="w-6 h-6" />
+                    {/* Header with Icon Badge & Category */}
+                    <div className="flex items-center gap-4 mb-5 pb-4 border-b border-white/[0.07]">
+                      <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-neutral-800 via-obsidian-900 to-black border border-gold/40 flex items-center justify-center text-gold shadow-[0_0_20px_rgba(212,175,55,0.25),inset_0_1px_1px_rgba(255,255,255,0.2)] group-hover:scale-105 group-hover:border-gold group-hover:shadow-[0_0_30px_rgba(212,175,55,0.45)] transition-all duration-300 shrink-0">
+                        <Icon className="w-6 h-6 text-gold" />
                       </div>
                       <div>
-                        <h3 className="font-heading font-bold text-lg text-white group-hover:text-gold transition-colors">
+                        <h3 className="font-heading font-bold text-lg sm:text-xl text-white group-hover:text-gold transition-colors tracking-tight">
                           {domain.category}
                         </h3>
-                        <span className="text-[11px] font-mono text-neutral-400 uppercase tracking-wider">
-                          Enterprise Tier
-                        </span>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]"></span>
+                          <span className="text-[10px] font-mono text-neutral-400 uppercase tracking-widest font-medium">
+                            Enterprise L1 Spec
+                          </span>
+                        </div>
                       </div>
                     </div>
 
@@ -164,41 +186,48 @@ export default function SkillsMatrix() {
                       {domain.description}
                     </p>
 
-                    {/* Technologies List */}
+                    {/* Technologies List: Precision Machined Chips */}
                     <div className="space-y-3 mb-6">
-                      <div className="text-[11px] font-mono uppercase tracking-wider text-gold/90 font-semibold">
-                        Core Systems & Tools
+                      <div className="text-[11px] font-mono uppercase tracking-wider text-gold/90 font-semibold flex items-center justify-between">
+                        <span>Core Systems & Stack</span>
+                        <span className="text-[10px] text-neutral-500 lowercase font-mono">5 modules</span>
                       </div>
+                      
                       <div className="space-y-2">
                         {domain.technologies.map((tech, tIdx) => (
                           <div
                             key={tIdx}
-                            className="p-2.5 rounded-lg bg-obsidian-900/80 border border-white/5 group-hover:border-white/10 transition-colors"
+                            className="p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] hover:border-gold/40 transition-all duration-300 flex items-center justify-between group/item shadow-sm hover:shadow-[0_4px_16px_rgba(212,175,55,0.1)]"
                           >
-                            <div className="flex items-center justify-between text-sm">
-                              <span className="font-heading font-semibold text-white">
+                            <div className="min-w-0 pr-2">
+                              <div className="font-heading font-semibold text-white group-hover/item:text-gold transition-colors text-sm truncate">
                                 {tech.name}
-                              </span>
-                              <span className="w-1.5 h-1.5 rounded-full bg-gold/70"></span>
+                              </div>
+                              <div className="text-[11px] text-neutral-400 font-light truncate mt-0.5">
+                                {tech.role}
+                              </div>
                             </div>
-                            <div className="text-[11px] text-neutral-400 font-light mt-0.5">
-                              {tech.role}
-                            </div>
+                            <span className="text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-md bg-gold/10 text-gold/90 border border-gold/20 font-semibold shrink-0">
+                              PROD
+                            </span>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                  {/* Architecture Highlights */}
-                  <div className="pt-4 border-t border-white/5">
-                    <div className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-2">
-                      System Capabilities
+                  {/* Architecture Highlights & System Capabilities Footer */}
+                  <div className="pt-5 mt-6 border-t border-white/[0.07] bg-white/[0.01] -mx-7 -mb-7 px-7 pb-6 rounded-b-3xl">
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-gold/90 mb-3 font-semibold flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3 text-gold" />
+                      <span>Architecture Highlights</span>
                     </div>
-                    <ul className="space-y-1.5">
+                    <ul className="space-y-2">
                       {domain.architectureHighlights.map((hl, hlIdx) => (
-                        <li key={hlIdx} className="flex items-center gap-2 text-xs text-neutral-300">
-                          <Check className="w-3.5 h-3.5 text-gold shrink-0" />
+                        <li key={hlIdx} className="flex items-center gap-2 text-xs text-neutral-300 font-light">
+                          <div className="w-4 h-4 rounded-full bg-gold/10 border border-gold/30 flex items-center justify-center shrink-0">
+                            <Check className="w-2.5 h-2.5 text-gold" />
+                          </div>
                           <span>{hl}</span>
                         </li>
                       ))}
