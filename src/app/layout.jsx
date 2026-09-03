@@ -35,7 +35,7 @@ export const metadata = {
     'Node.js',
     'Next.js',
     'Custom Linux Kernels',
-    'Distributed Systems Architecture'
+    'Voktra OS'
   ],
   authors: [{ name: 'Shashank Gowda NB', url: 'https://shashankgowdanb.netlify.app' }],
   creator: 'Shashank Gowda NB',

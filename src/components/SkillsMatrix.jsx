@@ -33,10 +33,28 @@ const SKILL_DOMAINS = [
     ]
   },
   {
+    id: 'backend-arch',
+    category: 'Core Backend & API Architecture',
+    icon: Server,
+    delayClass: 'float-delay-1',
+    description: 'High-concurrency microservices, memory-efficient systems programming, and enterprise backbones.',
+    technologies: [
+      { name: 'Node.js', role: 'Non-blocking Event-Driven Microservices' },
+      { name: 'C++', role: 'Low-latency Algorithms & Performance Critical Code' },
+      { name: 'Java', role: 'Enterprise Class Multi-threaded Architectures' }
+    ],
+    architectureHighlights: [
+      'REST, GraphQL & gRPC API Contracts',
+      'Non-blocking Asynchronous I/O & Concurrency',
+      'Pluggable Relational Repository Layers (PostgreSQL / AWS RDS)',
+      'Rate-Limiting, OAuth2/JWT & Circuit Breakers'
+    ]
+  },
+  {
     id: 'frontend-infra',
     category: 'Frontend Infrastructure',
     icon: LayoutGrid,
-    delayClass: 'float-delay-1',
+    delayClass: 'float-delay-2',
     description: 'High-performance SSR client architecture, progressive hydration, and responsive design systems.',
     technologies: [
       { name: 'React', role: 'Component Driven Scalable UI Systems' },
@@ -55,7 +73,7 @@ const SKILL_DOMAINS = [
     id: 'cloud-devops',
     category: 'Cloud & DevOps',
     icon: Cloud,
-    delayClass: 'float-delay-2',
+    delayClass: 'float-delay-3',
     description: 'Resilient cloud infrastructure, automated deployment pipelines, and low-latency networking.',
     technologies: [
       { name: 'AWS', role: 'Cloud Compute, S3, RDS, ALB & Scalable VPCs' },
@@ -72,7 +90,7 @@ const SKILL_DOMAINS = [
     id: 'os-security',
     category: 'OS & Security',
     icon: ShieldCheck,
-    delayClass: 'float-delay-3',
+    delayClass: 'float-delay-4',
     description: 'Kernel-level modifications, Linux systems engineering, offensive hardening, and telemetry hooks.',
     technologies: [
       { name: 'Linux', role: 'Kernel Customization & Syscall Tracing' },
@@ -81,7 +99,7 @@ const SKILL_DOMAINS = [
       { name: 'Ntfy.sh', role: 'Real-time Push Notification & Incident Telemetry' }
     ],
     architectureHighlights: [
-      'Custom Linux Kernel Customization',
+      'Custom Xubuntu OS Build (Voktra)',
       'Privilege Separation & Hardening',
       'Kernel Sysctl Networking Tweaks'
     ]
@@ -112,14 +130,16 @@ export default function SkillsMatrix() {
           </p>
         </div>
 
-        {/* Rebalanced 2x2 Grid with Anti-Gravity Staggered Floating */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+        {/* 5-Column Grid with Anti-Gravity Staggered Floating */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {SKILL_DOMAINS.map((domain, index) => {
             const Icon = domain.icon;
             return (
               <div
                 key={domain.id}
-                className={`floating-card ${domain.delayClass}`}
+                className={`floating-card ${domain.delayClass} ${
+                  index === 3 || index === 4 ? 'lg:col-span-1 md:col-span-1' : ''
+                }`}
               >
                 <div className="h-full rounded-2xl p-6 glass-panel flex flex-col justify-between group hover:border-gold/50 transition-all duration-500">
                   

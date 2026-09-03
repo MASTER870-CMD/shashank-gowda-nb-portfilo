@@ -23,6 +23,17 @@ try {
 
 const FALLBACK_PROJECTS = [
   {
+    id: 'voktra-os',
+    title: 'Voktra OS',
+    desc: 'Custom operating system built on Xubuntu with highly optimized terminal configurations, custom graphical rules, and low-level kernel integrations for systems engineering.',
+    category: 'Kernel & Systems Engineering',
+    image: '/images/readme.png',
+    live: 'https://github.com/MASTER870-CMD',
+    code: 'https://github.com/MASTER870-CMD',
+    date: '2026-03-01',
+    tech: ['Linux Kernel', 'Xubuntu', 'Zsh', 'Bash Scripting', 'XFCE']
+  },
+  {
     id: 'project-nexus-ai',
     title: 'Project Nexus AI',
     desc: 'Voice-activated personal AI assistant featuring complex API command routing, natural language processing (NLP), and low-level hardware integration.',
@@ -106,14 +117,9 @@ class ProjectsController {
       const projects = [];
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        const title = data.title || 'Untitled Project';
-        // Exclude Voktra OS completely
-        if (title.toLowerCase().includes('voktra') || doc.id.toLowerCase().includes('voktra')) {
-          return;
-        }
         projects.push({
           id: doc.id,
-          title: title,
+          title: data.title || 'Untitled Project',
           desc: data.desc || '',
           category: data.category || 'Engineering',
           image: data.image || '/images/preview.png',
