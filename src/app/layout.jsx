@@ -34,7 +34,7 @@ export const viewport = {
 };
 
 export const metadata = {
-  metadataBase: new URL('https://shashankgowdanb.netlify.app'),
+  metadataBase: new URL('https://shashank-gowda-nb-portfilo.vercel.app'),
   title: 'Shashank Gowda NB | AI Engineer & Principal Systems Architect',
   description: 'Portfolio of Shashank Gowda NB – AI Engineer & Systems Architect. Architecting high-throughput distributed software, custom operating systems, low-latency APIs, and enterprise AI ecosystems.',
   keywords: [
@@ -51,12 +51,12 @@ export const metadata = {
     'Custom Linux Kernels',
     'Voktra OS'
   ],
-  authors: [{ name: 'Shashank Gowda NB', url: 'https://shashankgowdanb.netlify.app' }],
+  authors: [{ name: 'Shashank Gowda NB', url: 'https://shashank-gowda-nb-portfilo.vercel.app' }],
   creator: 'Shashank Gowda NB',
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://shashankgowdanb.netlify.app',
+    url: 'https://shashank-gowda-nb-portfilo.vercel.app',
     title: 'Shashank Gowda NB | AI Engineer & Systems Architect',
     description: 'Architecting Scalable Software & AI Ecosystems. Zero-latency distributed architectures, enterprise APIs, and production deep learning.',
     siteName: 'Shashank Gowda NB Systems Portfolio',
@@ -94,8 +94,8 @@ export default function RootLayout({ children }) {
     '@type': 'Person',
     name: 'Shashank Gowda NB',
     jobTitle: 'AI Engineer & Principal Systems Architect',
-    url: 'https://shashankgowdanb.netlify.app',
-    image: 'https://shashankgowdanb.netlify.app/images/shashank-gowda-nb.jpg',
+    url: 'https://shashank-gowda-nb-portfilo.vercel.app',
+    image: 'https://shashank-gowda-nb-portfilo.vercel.app/images/shashank-gowda-nb.jpg',
     description: 'Principal Systems Architect and AI Engineer specializing in distributed computing, enterprise API design, custom Linux operating systems, and production machine learning.',
     email: 'shashankgowdanb166@gmail.com',
     sameAs: [

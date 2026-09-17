@@ -8,7 +8,7 @@ export async function generateMetadata({ params }) {
   const project = await fetchProjectById(resolvedParams.id);
   if (!project) return { title: 'Not Found' };
   
-  const url = `https://shashankgowdanb.netlify.app/projects/${project.id}`;
+  const url = `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.id}`;
 
   return {
     title: `${project.title} | Shashank Gowda NB`,
@@ -57,11 +57,11 @@ export default async function ProjectCaseStudy({ params }) {
     '@type': 'Article',
     headline: project.title,
     description: project.desc,
-    image: project.image || 'https://shashankgowdanb.netlify.app/images/preview.png',
+    image: project.image || 'https://shashank-gowda-nb-portfilo.vercel.app/images/preview.png',
     author: {
       '@type': 'Person',
       name: 'Shashank Gowda NB',
-      url: 'https://shashankgowdanb.netlify.app',
+      url: 'https://shashank-gowda-nb-portfilo.vercel.app',
     },
     publisher: {
       '@type': 'Person',

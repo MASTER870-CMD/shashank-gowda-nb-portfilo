@@ -1,5 +1,5 @@
 export default function robots() {
-  const baseUrl = 'https://shashankgowdanb.netlify.app';
+  const baseUrl = 'https://shashank-gowda-nb-portfilo.vercel.app';
 
   return {
     rules: {

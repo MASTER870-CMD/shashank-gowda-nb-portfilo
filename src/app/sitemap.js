@@ -1,7 +1,7 @@
 import { fetchProjects } from '@/lib/projects.service';
 
 export default async function sitemap() {
-  const baseUrl = 'https://shashankgowdanb.netlify.app';
+  const baseUrl = 'https://shashank-gowda-nb-portfilo.vercel.app';
 
   // Get all projects from Firebase
   const projects = await fetchProjects();
