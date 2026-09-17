@@ -1,5 +1,5 @@
 import './globals.css';
-import { Outfit, Space_Grotesk } from 'next/font/google';
+import { Outfit, Space_Grotesk, Fraunces, Inter } from 'next/font/google';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -12,6 +12,20 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-space-grotesk',
+  display: 'swap',
+});
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-fraunces',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -102,7 +116,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" className={`${outfit.variable} ${spaceGrotesk.variable} dark`}>
+    <html lang="en" className={`${outfit.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} dark`}>
       <head>
         <script
           type="application/ld+json"

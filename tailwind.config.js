@@ -8,6 +8,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        cream: '#F7F1E8',
+        terracotta: '#C1603A',
+        forest: '#3C4A3E',
         obsidian: {
           DEFAULT: '#050505',
           950: '#050505',
@@ -43,17 +46,23 @@ module.exports = {
         pulseSlow: {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.4' }
+        },
+        shimmer: {
+          '100%': { transform: 'translateX(100%)' }
         }
       },
       animation: {
         'antigravity': 'antiGravity 6s ease-in-out infinite',
         'antigravity-subtle': 'antiGravitySubtle 5s ease-in-out infinite',
-        'pulse-slow': 'pulseSlow 3s ease-in-out infinite'
+        'pulse-slow': 'pulseSlow 3s ease-in-out infinite',
+        'shimmer': 'shimmer 1.5s infinite'
       },
       fontFamily: {
         sans: ['var(--font-outfit)', 'sans-serif'],
         heading: ['var(--font-space-grotesk)', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace']
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        'maker-serif': ['var(--font-fraunces)', 'serif'],
+        'maker-sans': ['var(--font-inter)', 'sans-serif']
       }
     }
   },

@@ -1,4 +1,4 @@
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
 /**
@@ -16,6 +16,28 @@ import { db } from './firebase';
 
 // Enterprise Fallback Data matching Shashank's production archive
 export const FALLBACK_PROJECTS = [
+  {
+    id: 'elivora',
+    title: 'ELIVORA',
+    desc: 'A local-first, full-duplex voice AI agent for Windows that can see the screen or camera, hear and speak in real time via the Gemini Live API, and act directly on the machine — opening/closing apps, writing files, messaging WhatsApp, and pulling live web/weather data.',
+    category: 'AI & Systems Engineering',
+    image: '/images/elivora.png',
+    live: '#',
+    code: '#',
+    date: '2026-09-01',
+    tech: ['Python', 'Gemini Live API', 'PyWebView', 'OpenCV', 'PyAudio']
+  },
+  {
+    id: 'docuchat-ai',
+    title: 'DocuChat AI',
+    desc: 'A secure, serverless web app that lets you upload a PDF and have a real conversation with it — parsing documents instantly in-browser and answering questions through the Gemini API.',
+    category: 'Generative AI',
+    image: '/images/docuchat.png',
+    live: '#',
+    code: '#',
+    date: '2026-08-01',
+    tech: ['JavaScript', 'Vercel Serverless Functions', 'Google Gemini API', 'pdf.js']
+  },
   {
     id: 'voktra-os',
     title: 'Voktra OS',
@@ -111,7 +133,10 @@ export async function fetchProjects() {
         live: data.live || '#',
         code: data.code || '#',
         date: data.date || new Date().toISOString(),
-        tech: Array.isArray(data.tech) ? data.tech : []
+        tech: Array.isArray(data.tech) ? data.tech : [],
+        problem: data.problem || '',
+        built: data.built || '',
+        learned: data.learned || ''
       });
     });
 
@@ -119,5 +144,40 @@ export async function fetchProjects() {
   } catch (error) {
     console.warn('[FIRESTORE_FETCH_WARNING] Firestore unreachable or unconfigured on client:', error.message);
     return FALLBACK_PROJECTS;
+  }
+}
+
+/**
+ * Fetch a single project document by its ID.
+ * @param {string} id
+ * @returns {Promise<Project | null>}
+ */
+export async function fetchProjectById(id) {
+  try {
+    const docRef = doc(db, 'projects', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      return {
+        id: docSnap.id,
+        title: data.title || 'Untitled Project',
+        desc: data.desc || '',
+        category: data.category || 'Engineering',
+        image: data.image || '/images/preview.png',
+        live: data.live || '#',
+        code: data.code || '#',
+        date: data.date || new Date().toISOString(),
+        tech: Array.isArray(data.tech) ? data.tech : [],
+        problem: data.problem || '',
+        built: data.built || '',
+        learned: data.learned || ''
+      };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error('[FIRESTORE] Error fetching project by id:', error);
+    return null;
   }
 }

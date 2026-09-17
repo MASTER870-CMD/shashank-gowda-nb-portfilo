@@ -1,125 +1,104 @@
 'use client';
-
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { 
-  Search, 
-  ExternalLink, 
-  Github, 
-  ArrowLeft, 
-  Calendar, 
-  Loader2,
-  Database
-} from 'lucide-react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import { ExternalLink, Github, Loader2, ArrowLeft, Search, X, BookOpen } from 'lucide-react';
 import { useProjects } from '@/hooks/useProjects';
-
-const CATEGORIES = ['ALL', 'WEB', 'AI', 'TOOLS'];
-
-function matchesCategory(projectCategory, filter) {
-  if (filter === 'ALL') return true;
-  if (!projectCategory) return false;
-  const cat = projectCategory.toUpperCase();
-  if (filter === 'WEB') {
-    return cat.includes('WEB') || cat.includes('APP') || cat.includes('FRONT') || cat.includes('STACK') || cat.includes('HUB');
-  }
-  if (filter === 'AI') {
-    return cat.includes('AI') || cat.includes('VISION') || cat.includes('LEARNING') || cat.includes('NLP') || cat.includes('TENSOR');
-  }
-  if (filter === 'TOOLS') {
-    return cat.includes('TOOL') || cat.includes('SECURITY') || cat.includes('KERNEL') || cat.includes('OS') || cat.includes('SCRIPT') || cat.includes('VAULT');
-  }
-  return cat.includes(filter);
-}
+import { motion } from 'framer-motion';
+import { SkeletonGrid } from '@/components/SkeletonGrid';
 
 export default function ProjectsArchivePage() {
-  const { projects, loading } = useProjects();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const { projects, loading, error } = useProjects();
+  const [filter, setFilter] = useState('All');
+  const [search, setSearch] = useState('');
+  
+  const categories = ['All', ...new Set(projects.map(p => p.category))].filter(Boolean);
 
-  // Filter projects based on search query and category toggle
   const filteredProjects = useMemo(() => {
-    return projects.filter((p) => {
-      const matchCat = matchesCategory(p.category, selectedCategory);
-      const q = searchQuery.toLowerCase().trim();
-      const matchSearch =
-        !q ||
+    let result = filter === 'All' ? projects : projects.filter(p => p.category === filter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(p =>
         p.title?.toLowerCase().includes(q) ||
         p.desc?.toLowerCase().includes(q) ||
-        (Array.isArray(p.tech) && p.tech.some((t) => t.toLowerCase().includes(q)));
+        p.tech?.some(t => t.toLowerCase().includes(q)) ||
+        p.category?.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [projects, filter, search]);
 
-      return matchCat && matchSearch;
-    });
-  }, [projects, searchQuery, selectedCategory]);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.15 } }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } }
+  };
+
+  const hasCaseStudy = (p) => p.problem || p.built || p.learned;
 
   return (
-    <div className="min-h-screen bg-obsidian-950 text-white selection:bg-gold selection:text-obsidian-950 flex flex-col justify-between">
-      <Navbar />
+    <main className="min-h-screen bg-[#FAF6F0] text-[#24211E]">
+      <section className="px-6 py-16 md:py-28 max-w-7xl mx-auto">
+        
+        {/* Back Button */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="mb-12"
+        >
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-3 font-['Epilogue'] text-sm font-bold uppercase tracking-widest text-[#24211E] border-2 border-[#24211E] px-6 py-3 hover:bg-[#24211E] hover:text-[#FAF6F0] transition-colors group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Home
+          </Link>
+        </motion.div>
 
-      <main className="flex-grow pt-28 sm:pt-32 pb-24 bg-obsidian-950 relative">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-24">
-          
-          {/* Dedicated Return to Home Navigation */}
-          <div className="mb-8">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-yellow-500 border border-yellow-500/30 hover:bg-yellow-500/10 px-3.5 sm:px-4 py-2 rounded-md transition-all font-mono text-xs sm:text-sm whitespace-nowrap group"
+        {/* Page Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="mb-16"
+        >
+          <h1 className="font-['Epilogue'] text-6xl md:text-8xl font-bold tracking-tight mb-6">
+            The Archive.
+          </h1>
+          <p className="font-['Literata'] text-xl md:text-2xl text-[#3C4A3E] max-w-2xl leading-relaxed">
+            A comprehensive ledger of architectural implementations, systems design, and full-stack engineering efforts.
+          </p>
+        </motion.div>
+
+        {loading ? (
+          <div className="mt-8">
+            <SkeletonGrid count={6} cols={3} />
+          </div>
+        ) : error ? (
+          <div className="p-8 border-2 border-red-500 text-red-500 font-bold bg-white">{error}</div>
+        ) : (
+          <>
+            {/* Filters + Search */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col md:flex-row gap-6 mb-16"
             >
-              <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform shrink-0" />
-              <span>&lt; BACK TO SYSTEMS SPEC &amp; HOME</span>
-            </Link>
-          </div>
-
-          {/* Header Section with Responsive Typography */}
-          <div className="text-left mb-10 border-b border-neutral-800/80 pb-8">
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-              <div>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-bold text-white tracking-tight leading-tight">
-                  Engineering Project Archive
-                </h1>
-                <p className="mt-3 text-neutral-400 text-sm md:text-base font-light max-w-2xl leading-relaxed">
-                  Enterprise-grade portfolio archive synchronized live with backend Firestore database. Explore full-stack systems, computer vision models, and custom OS architectures.
-                </p>
-              </div>
-
-              {/* Live Sync Indicator Badge */}
-              <div className="inline-flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-neutral-900 border border-neutral-800 font-mono text-xs self-start lg:self-auto shrink-0">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_#34d399]"></span>
-                <span className="text-neutral-400 uppercase tracking-wider text-[11px]">Database Sync:</span>
-                <span className="text-white font-semibold">
-                  {loading ? 'SYNCING...' : `${projects.length} Production Deployments`}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Filter Bar: Stacking Flex Layout */}
-          <div className="p-4 sm:p-5 rounded-xl bg-neutral-900/40 border border-neutral-800/80 mb-10">
-            <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 w-full">
-              
-              {/* Sleek Dark Search Field */}
-              <div className="relative flex-1 w-full md:max-w-md">
-                <Search className="w-4 h-4 text-neutral-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Filter by title, stack..."
-                  className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-obsidian-950 border border-neutral-800 text-white placeholder-neutral-500 text-xs sm:text-sm focus:outline-none focus:border-gold/60 transition-colors font-mono"
-                />
-              </div>
-
-              {/* Category Toggle Buttons: flex-wrap justify-start */}
-              <div className="flex flex-wrap items-center justify-start gap-1.5 sm:gap-2">
-                {CATEGORIES.map((cat) => (
+              {/* Category Filters */}
+              <div className="flex flex-wrap gap-3">
+                {categories.map(cat => (
                   <button
                     key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs font-mono uppercase tracking-wider transition-colors shrink-0 ${
-                      selectedCategory === cat
-                        ? 'bg-gold text-obsidian-950 font-bold'
-                        : 'bg-neutral-900 border border-neutral-800 text-neutral-400 hover:text-white hover:border-neutral-700'
+                    onClick={() => setFilter(cat)}
+                    className={`px-5 py-2.5 font-['Epilogue'] text-xs font-bold uppercase tracking-widest border-2 transition-colors duration-300 ${
+                      filter === cat 
+                        ? 'bg-[#24211E] text-[#FAF6F0] border-[#24211E]' 
+                        : 'bg-transparent text-[#24211E] border-[#24211E] hover:bg-[#24211E]/10'
                     }`}
                   >
                     {cat}
@@ -127,141 +106,149 @@ export default function ProjectsArchivePage() {
                 ))}
               </div>
 
-            </div>
-          </div>
-
-          {/* Loading Indicator */}
-          {loading && (
-            <div className="py-24 text-center">
-              <Loader2 className="w-8 h-8 animate-spin text-gold mx-auto mb-3" />
-              <div className="text-xs font-mono text-neutral-500">
-                Retrieving database records from Firestore...
+              {/* Search */}
+              <div className="relative md:ml-auto w-full md:w-72">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#24211E]/50" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search projects, tech..."
+                  className="w-full pl-10 pr-10 py-2.5 border-2 border-[#24211E] bg-white text-[#24211E] font-['Epilogue'] text-sm focus:outline-none focus:border-[#C1603A] placeholder:text-[#24211E]/40"
+                />
+                {search && (
+                  <button onClick={() => setSearch('')} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#24211E]/50 hover:text-[#C1603A]">
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
               </div>
-            </div>
-          )}
+            </motion.div>
 
-          {/* Empty Search State */}
-          {!loading && filteredProjects.length === 0 && (
-            <div className="py-20 text-center rounded-2xl bg-neutral-900/30 border border-neutral-800">
-              <Database className="w-10 h-10 text-neutral-600 mx-auto mb-3" />
-              <h3 className="text-base font-heading font-semibold text-white mb-1">
-                No matching projects found
-              </h3>
-              <p className="text-xs font-mono text-neutral-500 mb-4">
-                No entities match query "{searchQuery}" in category [{selectedCategory}].
+            {/* Results count */}
+            {search && (
+              <p className="font-['Epilogue'] text-sm font-bold uppercase tracking-widest text-[#C1603A] mb-8">
+                {filteredProjects.length} result{filteredProjects.length !== 1 ? 's' : ''} for "{search}"
               </p>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setSelectedCategory('ALL');
-                }}
-                className="px-3 py-1.5 rounded-lg bg-gold/10 border border-gold/30 text-gold text-xs font-mono uppercase"
+            )}
+
+            {filteredProjects.length === 0 ? (
+              <div className="text-center py-20 border-2 border-dashed border-[#24211E]/30">
+                <p className="font-['Literata'] text-xl text-[#24211E]/50">No projects found matching your search.</p>
+              </div>
+            ) : (
+              <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-50px" }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
               >
-                Reset Filters
-              </button>
-            </div>
-          )}
-
-          {/* Clean Grid UI: Spacious Responsive CSS Grid (1 col on mobile, 2 on tablet, 3 on desktop) */}
-          {!loading && filteredProjects.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 items-stretch">
-              {filteredProjects.map((project, index) => (
-                <article
-                  key={project.id || index}
-                  className="rounded-2xl overflow-hidden border border-white/5 hover:border-neutral-700 bg-obsidian-900/80 transition-all duration-300 flex flex-col justify-between shadow-xl"
-                >
-                  
-                  {/* Top Half: aspect-video container with rounded top corners */}
-                  <div className="relative w-full aspect-video bg-neutral-950 overflow-hidden rounded-t-2xl flex items-center justify-center border-b border-white/5">
-                    <img
-                      src={project.image || '/images/preview.png'}
-                      alt={project.title}
-                      className="w-full h-full object-cover object-center rounded-t-2xl transition-transform duration-500 ease-out hover:scale-105"
-                      onError={(e) => {
-                        e.currentTarget.src = '/images/preview.png';
-                      }}
-                    />
-
-                    {/* Category Badge: Absolute top-4 left-4 z-10 */}
-                    <div className="absolute top-4 left-4 z-10 px-3 py-1 bg-black/80 backdrop-blur-md border border-white/10 text-xs font-medium text-yellow-500 rounded-md uppercase tracking-wider">
-                      {project.category || 'ENGINEERING'}
+                {filteredProjects.map((project) => (
+                  <motion.article 
+                    variants={cardVariants}
+                    key={project.id} 
+                    className="group border-2 border-[#24211E] bg-[#FAF6F0] hover:bg-[#24211E] transition-colors duration-300 flex flex-col"
+                  >
+                    {/* Project Image */}
+                    <div className="relative w-full h-52 overflow-hidden border-b-2 border-[#24211E] group-hover:border-[#FAF6F0]/20 transition-colors bg-[#24211E]/5 flex items-center justify-center">
+                      <img 
+                        src={project.image || '/images/preview.png'} 
+                        alt={project.title} 
+                        className="absolute inset-0 w-full h-full object-cover opacity-30 blur-xl scale-110" 
+                        onError={(e) => { e.currentTarget.src = '/images/preview.png'; }}
+                      />
+                      <img 
+                        src={project.image || '/images/preview.png'} 
+                        alt={project.title} 
+                        className="relative z-10 w-full h-full object-contain transition-transform duration-700 group-hover:scale-105 p-4" 
+                        onError={(e) => { e.currentTarget.src = '/images/preview.png'; }}
+                      />
                     </div>
-                  </div>
 
-                  {/* Bottom Half: Spacious Typography & Breathing Room (p-6 sm:p-8) */}
-                  <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between bg-neutral-900/40">
-                    <div>
-                      {/* Title: text-xl font-semibold text-white tracking-tight mb-2 */}
-                      <h3 className="text-xl font-semibold text-white tracking-tight mb-2 line-clamp-1">
+                    {/* Card Body */}
+                    <div className="p-6 md:p-8 flex-1 flex flex-col">
+                      <div className="flex justify-between items-start mb-4">
+                        <span className="font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#C1603A]">{project.category || 'Architecture'}</span>
+                        <span className="font-['Epilogue'] text-xs uppercase tracking-widest text-[#24211E] group-hover:text-[#FAF6F0] opacity-60 transition-colors">
+                          {project.date ? new Date(project.date).getFullYear() : ''}
+                        </span>
+                      </div>
+                      
+                      <h3 className="font-['Epilogue'] text-2xl font-bold mb-3 text-[#24211E] group-hover:text-[#FAF6F0] transition-colors">
                         {project.title}
                       </h3>
                       
-                      {/* Description: text-sm text-neutral-400 leading-relaxed line-clamp-3 mb-6 */}
-                      <p className="text-sm text-neutral-400 leading-relaxed line-clamp-3 mb-6">
+                      <p className="font-['Literata'] text-base text-[#3C4A3E] group-hover:text-[#FAF6F0]/80 mb-6 line-clamp-3 leading-relaxed transition-colors flex-1">
                         {project.desc}
                       </p>
+                      
+                      <div className="flex flex-wrap gap-2 mt-auto mb-6">
+                        {project.tech?.slice(0, 4).map(t => (
+                          <span 
+                            key={t} 
+                            className="px-2 py-1 border border-[#24211E]/20 group-hover:border-[#FAF6F0]/20 text-[10px] font-['Epilogue'] uppercase font-bold tracking-widest text-[#24211E] group-hover:text-[#FAF6F0] transition-colors"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                        {project.tech?.length > 4 && (
+                          <span className="px-2 py-1 text-[10px] font-['Epilogue'] uppercase font-bold tracking-widest text-[#24211E]/50 group-hover:text-[#FAF6F0]/50">
+                            +{project.tech.length - 4}
+                          </span>
+                        )}
+                      </div>
+                    </div>
 
-                      {/* Tech Pills: flex flex-wrap gap-2 */}
-                      {Array.isArray(project.tech) && project.tech.length > 0 && (
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {project.tech.map((t, tIdx) => (
-                            <span
-                              key={tIdx}
-                              className="px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-[11px] text-neutral-300 font-mono"
-                            >
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+                    {/* Smart Action Buttons */}
+                    <div className="border-t-2 border-[#24211E] group-hover:border-[#FAF6F0]/20 transition-colors flex flex-wrap">
+                      {hasCaseStudy(project) && (
+                        <Link 
+                          href={`/projects/${project.id}`}
+                          className="flex-1 min-w-0 p-4 flex items-center justify-center gap-2 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E] group-hover:text-[#FAF6F0] border-r border-[#24211E]/20 group-hover:border-[#FAF6F0]/20 hover:bg-[#C1603A] hover:!text-[#FAF6F0] transition-colors"
+                        >
+                          <BookOpen className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">Case Study</span>
+                        </Link>
+                      )}
+                      {project.live && project.live !== '#' && (
+                        <a 
+                          href={project.live} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex-1 min-w-0 p-4 flex items-center justify-center gap-2 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E] group-hover:text-[#FAF6F0] border-r border-[#24211E]/20 group-hover:border-[#FAF6F0]/20 hover:bg-[#C1603A] hover:!text-[#FAF6F0] transition-colors last:border-r-0"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">Preview</span>
+                        </a>
+                      )}
+                      {project.code && project.code !== '#' && (
+                        <a 
+                          href={project.code} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex-1 min-w-0 p-4 flex items-center justify-center gap-2 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E] group-hover:text-[#FAF6F0] hover:bg-[#24211E] hover:!text-[#FAF6F0] transition-colors"
+                        >
+                          <Github className="w-3.5 h-3.5 shrink-0" />
+                          <span className="truncate">GitHub</span>
+                        </a>
+                      )}
+                      {/* Fallback if project has nothing */}
+                      {!hasCaseStudy(project) && (!project.live || project.live === '#') && (!project.code || project.code === '#') && (
+                        <Link
+                          href={`/projects/${project.id}`}
+                          className="flex-1 p-4 flex items-center justify-center gap-2 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E]/40 group-hover:text-[#FAF6F0]/40 transition-colors"
+                        >
+                          Coming Soon
+                        </Link>
                       )}
                     </div>
-
-                    {/* Footer of Card: Flex row with Date on left, Live & Code buttons on right */}
-                    <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 text-xs font-mono text-neutral-500">
-                        <Calendar className="w-3.5 h-3.5" />
-                        <span>{project.date || 'Active'}</span>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        {project.live && project.live !== '#' && (
-                          <a
-                            href={project.live}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gold text-obsidian-950 text-xs font-heading font-semibold uppercase hover:bg-white transition-colors"
-                          >
-                            <span>Live</span>
-                            <ExternalLink className="w-3 h-3" />
-                          </a>
-                        )}
-
-                        {project.code && project.code !== '#' && (
-                          <a
-                            href={project.code}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 rounded-lg bg-white/5 border border-white/10 text-neutral-300 hover:text-white hover:border-neutral-600 transition-colors"
-                            title="View Source Code"
-                            aria-label={`View code for ${project.title}`}
-                          >
-                            <Github className="w-4 h-4" />
-                          </a>
-                        )}
-                      </div>
-                    </div>
-
-                  </div>
-
-                </article>
-              ))}
-            </div>
-          )}
-
-        </div>
-      </main>
-
-      <Footer />
-    </div>
+                  </motion.article>
+                ))}
+              </motion.div>
+            )}
+          </>
+        )}
+      </section>
+    </main>
   );
 }

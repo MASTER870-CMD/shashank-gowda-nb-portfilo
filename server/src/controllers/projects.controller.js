@@ -126,7 +126,10 @@ class ProjectsController {
           live: data.live || '#',
           code: data.code || '#',
           date: data.date || new Date().toISOString(),
-          tech: Array.isArray(data.tech) ? data.tech : []
+          tech: Array.isArray(data.tech) ? data.tech : [],
+          problem: data.problem || '',
+          built: data.built || '',
+          learned: data.learned || ''
         });
       });
 
