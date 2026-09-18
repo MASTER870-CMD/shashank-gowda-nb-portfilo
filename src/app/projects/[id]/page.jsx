@@ -9,10 +9,13 @@ export async function generateMetadata({ params }) {
   if (!project) return { title: 'Not Found' };
   
   const url = `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.id}`;
+  
+  const keywords = [...(project.tech || []), project.category, 'Shashank Gowda NB', 'Systems Architecture', 'AI Engineering'].filter(Boolean).join(', ');
 
   return {
     title: `${project.title} | Shashank Gowda NB`,
     description: project.desc,
+    keywords: keywords,
     alternates: {
       canonical: url,
     },
@@ -52,12 +55,16 @@ export default async function ProjectCaseStudy({ params }) {
   const builtText = project.built || "Architected using modern paradigms, this system leverages high-throughput backends and responsive client-side interfaces.";
   const learnedText = project.learned || "The deployment resulted in massive efficiency gains, proving the viability of scalable, distributed software architectures.";
 
+  // Advanced AEO (Answer Engine Optimization) Schema
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Article',
+    '@type': 'SoftwareApplication',
+    name: project.title,
     headline: project.title,
     description: project.desc,
     image: project.image || 'https://shashank-gowda-nb-portfilo.vercel.app/images/preview.png',
+    applicationCategory: project.category || 'SoftwareApplication',
+    operatingSystem: 'Any',
     author: {
       '@type': 'Person',
       name: 'Shashank Gowda NB',
@@ -67,7 +74,15 @@ export default async function ProjectCaseStudy({ params }) {
       '@type': 'Person',
       name: 'Shashank Gowda NB',
     },
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    url: project.live && project.live !== '#' ? project.live : `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.id}`,
+    sameAs: project.code && project.code !== '#' ? [project.code] : [],
     datePublished: project.date || new Date().toISOString(),
+    softwareRequirements: project.tech ? project.tech.join(', ') : 'Modern Browser'
   };
 
   return (
