@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { fetchProjects } from '@/lib/projects.service';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/projects
  * Backend-only API Route: Fetches from Firebase Firestore securely on the server.
