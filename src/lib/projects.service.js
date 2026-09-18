@@ -124,9 +124,21 @@ export async function fetchProjects() {
     const projects = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
+      
+      // Smart title fallback if user forgets to add 'title' field in Firebase
+      let title = data.title;
+      if (!title) {
+        if (data.code && data.code.includes('github.com')) {
+          const repo = data.code.split('/').pop().replace('.git', '');
+          title = repo.charAt(0).toUpperCase() + repo.slice(1).replace(/-/g, ' ');
+        } else {
+          title = 'Untitled Project';
+        }
+      }
+
       projects.push({
         id: doc.id,
-        title: data.title || 'Untitled Project',
+        title: title,
         desc: data.desc || '',
         category: data.category || 'Engineering',
         image: data.image || '/images/preview.png',
