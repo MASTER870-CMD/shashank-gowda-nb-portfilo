@@ -20,8 +20,9 @@ export default function Footer() {
 
         <div className="flex flex-col space-y-3 font-['Literata'] text-[#24211E] text-sm">
           <Link href="/" className="hover:text-[#C1603A] transition-colors">Home</Link>
-          <Link href="/projects" className="hover:text-[#C1603A] transition-colors">Work</Link>
-          <Link href="/skills" className="hover:text-[#C1603A] transition-colors">Toolkit</Link>
+          <Link href="/about" className="hover:text-[#C1603A] transition-colors">About Shashank</Link>
+          <Link href="/projects" className="hover:text-[#C1603A] transition-colors">Projects & Work</Link>
+          <Link href="/matrix" className="hover:text-[#C1603A] transition-colors">Skills & Toolkit</Link>
           <Link href="/contact" className="hover:text-[#C1603A] transition-colors">Contact</Link>
         </div>
 

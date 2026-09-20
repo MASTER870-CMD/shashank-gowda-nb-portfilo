@@ -110,31 +110,34 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Shashank Gowda NB',
-    jobTitle: 'AI Engineer & Principal Systems Architect',
-    url: 'https://shashank-gowda-nb-portfilo.vercel.app',
-    image: 'https://shashank-gowda-nb-portfilo.vercel.app/images/shashank-gowda-nb.jpg',
-    description: 'Principal Systems Architect and AI Engineer specializing in distributed computing, enterprise API design, custom Linux operating systems, and production machine learning.',
-    email: 'shashankgowdanb166@gmail.com',
-    sameAs: [
-      'https://www.linkedin.com/in/shashank-gowda-nb-b94724375',
-      'https://github.com/MASTER870-CMD'
-    ],
-    knowsAbout: [
-      'Distributed Systems',
-      'Enterprise API Architecture',
-      'Artificial Intelligence',
-      'Deep Learning Pipelines',
-      'TensorFlow',
-      'Linux Kernel Customization',
-      'Node.js High Concurrency',
-      'Next.js SSR',
-      'Cloud Infrastructure (AWS)'
-    ]
-  };
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: 'Shashank Gowda NB',
+      url: 'https://shashank-gowda-nb-portfilo.vercel.app',
+      jobTitle: 'AI Engineer & Full-Stack Developer',
+      image: 'https://shashank-gowda-nb-portfilo.vercel.app/images/shashank-gowda-nb.jpg',
+      description: 'AI Engineer and Full-Stack Developer specializing in artificial intelligence, enterprise ERP systems, and cloud architecture.',
+      email: 'shashankgowdanb166@gmail.com',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Bengaluru',
+        addressRegion: 'Karnataka',
+        addressCountry: 'IN'
+      },
+      sameAs: [
+        'https://www.linkedin.com/in/shashank-gowda-nb-b94724375',
+        'https://github.com/MASTER870-CMD'
+      ]
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'Shashank Gowda NB',
+      url: 'https://shashank-gowda-nb-portfilo.vercel.app'
+    }
+  ];
 
   return (
     <html lang="en" className={`${outfit.variable} ${spaceGrotesk.variable} ${fraunces.variable} ${inter.variable} dark`}>

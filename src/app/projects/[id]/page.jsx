@@ -56,34 +56,55 @@ export default async function ProjectCaseStudy({ params }) {
   const learnedText = project.learned || "The deployment resulted in massive efficiency gains, proving the viability of scalable, distributed software architectures.";
 
   // Advanced AEO (Answer Engine Optimization) Schema
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: project.title,
-    headline: project.title,
-    description: project.desc,
-    image: project.image || 'https://shashank-gowda-nb-portfilo.vercel.app/images/preview.png',
-    applicationCategory: project.category || 'SoftwareApplication',
-    operatingSystem: 'Any',
-    author: {
-      '@type': 'Person',
-      name: 'Shashank Gowda NB',
-      url: 'https://shashank-gowda-nb-portfilo.vercel.app',
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: project.title,
+      headline: project.title,
+      description: project.desc,
+      image: project.image || 'https://shashank-gowda-nb-portfilo.vercel.app/images/preview.png',
+      applicationCategory: project.category || 'SoftwareApplication',
+      operatingSystem: 'Any',
+      author: {
+        '@type': 'Person',
+        name: 'Shashank Gowda NB',
+        url: 'https://shashank-gowda-nb-portfilo.vercel.app',
+      },
+      publisher: {
+        '@type': 'Person',
+        name: 'Shashank Gowda NB',
+      },
+      url: project.live && project.live !== '#' ? project.live : `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.slug || project.id}`,
+      sameAs: project.code && project.code !== '#' ? [project.code] : [],
+      datePublished: project.date || new Date().toISOString(),
+      softwareRequirements: project.tech ? project.tech.join(', ') : 'Modern Browser'
     },
-    publisher: {
-      '@type': 'Person',
-      name: 'Shashank Gowda NB',
-    },
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    url: project.live && project.live !== '#' ? project.live : `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.slug || project.id}`,
-    sameAs: project.code && project.code !== '#' ? [project.code] : [],
-    datePublished: project.date || new Date().toISOString(),
-    softwareRequirements: project.tech ? project.tech.join(', ') : 'Modern Browser'
-  };
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: 'https://shashank-gowda-nb-portfilo.vercel.app/'
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Projects',
+          item: 'https://shashank-gowda-nb-portfilo.vercel.app/projects'
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: project.title,
+          item: `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.slug || project.id}`
+        }
+      ]
+    }
+  ];
 
   return (
     <>

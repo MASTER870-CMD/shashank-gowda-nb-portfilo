@@ -8,13 +8,16 @@ export default function Hero() {
       <div className="flex flex-col-reverse md:flex-row gap-12 items-start">
         <div className="flex-1 space-y-8">
           <h1 className="font-['Epilogue'] text-5xl md:text-7xl lg:text-8xl text-[#24211E] font-bold leading-[1.1] tracking-tight">
-            Software Engineer <br/> & Architect.
+            Shashank Gowda NB
           </h1>
-          <p className="text-xl md:text-3xl text-[#24211E] font-['Literata'] leading-relaxed max-w-2xl">
-            I build mobile apps for Android & iOS, Windows desktop software, enterprise ERP systems, full-stack websites, and AI-powered APIs.
+          <h2 className="text-2xl md:text-4xl text-[#C1603A] font-['Epilogue'] font-bold tracking-tight">
+            AI Engineer & Full-Stack Developer
+          </h2>
+          <p className="text-xl md:text-2xl text-[#24211E] font-['Literata'] leading-relaxed max-w-2xl">
+            Shashank Gowda NB is an AI Engineer and Full-Stack Developer based in Bengaluru, India, focused on building AI applications, enterprise ERP systems, cloud solutions, full-stack web applications, and production software.
           </p>
           <p className="text-[#3C4A3E] italic font-['Literata'] text-lg md:text-xl max-w-2xl hidden md:block">
-            Currently studying engineering (NTTF) · crafting high-performance, production-ready systems.
+            Bengaluru, India · AI · Full-Stack Development · Cloud · ERP Systems
           </p>
           <div className="pt-8">
             <Link
