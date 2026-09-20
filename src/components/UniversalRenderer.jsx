@@ -115,6 +115,59 @@ export default function UniversalRenderer({ content }) {
   };
 
   const renderedBlocks = [];
+  let currentList = null;
+
+  const flushList = () => {
+    if (!currentList) return;
+    const { type, items, start } = currentList;
+    const Tag = type === 'numbered' ? 'ol' : 'ul';
+    const isIntelligent = items.some(item => item.description.length > 0);
+    
+    if (isIntelligent) {
+      renderedBlocks.push(
+        <Tag key={`list-${renderedBlocks.length}`} start={type === 'numbered' && start !== 1 ? start : undefined} className={`my-8 space-y-8 w-full ${type === 'numbered' ? 'list-decimal list-outside ml-6' : ''}`}>
+          {items.map((item, idx) => (
+            <li key={idx} className={`${type === 'bullet' ? 'flex items-start gap-4' : 'pl-2'}`}>
+              {type === 'bullet' && <span className="text-[#C1603A] mt-1.5 shrink-0">•</span>}
+              <div className="w-full">
+                <strong className="block font-['Epilogue'] text-lg text-[#24211E] mb-2 break-words">{parseInline(item.title)}</strong>
+                {item.description.length > 0 && (
+                  <p className="font-['Literata'] text-lg text-[#3C4A3E] leading-relaxed break-words">
+                    {parseInline(item.description.join(' '))}
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </Tag>
+      );
+    } else {
+      const isTechStack = items.every(item => item.title.length < 30);
+      if (isTechStack && items.length >= 3) {
+        renderedBlocks.push(
+          <div key={`list-${renderedBlocks.length}`} className="my-8 flex flex-wrap gap-3">
+            {items.map((item, idx) => (
+              <span key={idx} className="px-4 py-2 bg-[#24211E]/5 border border-[#24211E]/20 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E] break-words">
+                {parseInline(item.title)}
+              </span>
+            ))}
+          </div>
+        );
+      } else {
+        renderedBlocks.push(
+          <Tag key={`list-${renderedBlocks.length}`} start={type === 'numbered' && start !== 1 ? start : undefined} className={`my-8 space-y-3 font-['Literata'] text-xl text-[#3C4A3E] leading-relaxed w-full ${type === 'numbered' ? 'list-decimal list-outside ml-6' : ''}`}>
+            {items.map((item, idx) => (
+              <li key={idx} className={`${type === 'bullet' ? 'flex items-start gap-4' : 'pl-2'} break-words`}>
+                {type === 'bullet' && <span className="text-[#C1603A] mt-1.5 shrink-0">•</span>}
+                <span>{parseInline(item.title)}</span>
+              </li>
+            ))}
+          </Tag>
+        );
+      }
+    }
+    currentList = null;
+  };
   
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
@@ -122,6 +175,7 @@ export default function UniversalRenderer({ content }) {
 
     // 1. Code Block
     if (block.startsWith('```')) {
+      flushList();
       const codeLines = block.split('\n');
       const code = codeLines.slice(1, codeLines[codeLines.length - 1].trim() === '```' ? -1 : undefined).join('\n');
       renderedBlocks.push(
@@ -136,13 +190,13 @@ export default function UniversalRenderer({ content }) {
 
     // 2. Heading
     if (lines.length === 1 && isHeadingLine(lines[0])) {
+      flushList();
       let level = 2;
       let text = lines[0];
       if (text.startsWith('###')) { level = 3; text = text.replace(/^###\s*/, ''); }
       else if (text.startsWith('##')) { level = 2; text = text.replace(/^##\s*/, ''); }
       else if (text.startsWith('#')) { level = 1; text = text.replace(/^#\s*/, ''); }
       else {
-        // Natural keyword heading
         level = 2;
       }
 
@@ -162,6 +216,7 @@ export default function UniversalRenderer({ content }) {
 
     // 3. Architecture Flow
     if (isFlow(block)) {
+      flushList();
       const flowArrows = ['↓', '->', '→'];
       let steps = [];
       if (lines.some(l => flowArrows.includes(l.trim()))) {
@@ -192,6 +247,7 @@ export default function UniversalRenderer({ content }) {
 
     // 4. Decision Block
     if (isDecision(block)) {
+      flushList();
       renderedBlocks.push(
         <div key={i} className="my-8 space-y-3 w-full">
           {lines.map((line, idx) => {
@@ -218,7 +274,6 @@ export default function UniversalRenderer({ content }) {
     // 5. Intelligent List (Numbered + Description) OR Bullet list
     let isList = true;
     let listType = null;
-    let isIntelligent = false;
     const parsedListItems = [];
     let currentItem = null;
 
@@ -246,52 +301,20 @@ export default function UniversalRenderer({ content }) {
     if (currentItem) parsedListItems.push(currentItem);
 
     if (isList && parsedListItems.length > 0) {
-      isIntelligent = parsedListItems.some(item => item.description.length > 0);
-      
-      if (isIntelligent) {
-        const Tag = listType === 'numbered' ? 'ol' : 'ul';
-        renderedBlocks.push(
-          <Tag key={i} className={`my-8 space-y-8 w-full ${listType === 'numbered' ? 'list-decimal list-outside ml-6' : ''}`}>
-            {parsedListItems.map((item, idx) => (
-              <li key={idx} className={`${listType === 'bullet' ? 'flex items-start gap-4' : 'pl-2'}`}>
-                {listType === 'bullet' && <span className="text-[#C1603A] mt-1.5 shrink-0">•</span>}
-                <div className="w-full">
-                  <strong className="block font-['Epilogue'] text-lg text-[#24211E] mb-2 break-words">{parseInline(item.title)}</strong>
-                  {item.description.length > 0 && (
-                    <p className="font-['Literata'] text-lg text-[#3C4A3E] leading-relaxed break-words">
-                      {parseInline(item.description.join(' '))}
-                    </p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </Tag>
-        );
+      if (currentList && currentList.type === listType) {
+        currentList.items.push(...parsedListItems);
       } else {
-        const isTechStack = parsedListItems.every(item => item.title.length < 30);
-        if (isTechStack && parsedListItems.length >= 3) {
-          renderedBlocks.push(
-            <div key={i} className="my-8 flex flex-wrap gap-3">
-              {parsedListItems.map((item, idx) => (
-                <span key={idx} className="px-4 py-2 bg-[#24211E]/5 border border-[#24211E]/20 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E] break-words">
-                  {parseInline(item.title)}
-                </span>
-              ))}
-            </div>
-          );
-        } else {
-          const Tag = listType === 'numbered' ? 'ol' : 'ul';
-          renderedBlocks.push(
-            <Tag key={i} className={`my-8 space-y-3 font-['Literata'] text-xl text-[#3C4A3E] leading-relaxed w-full ${listType === 'numbered' ? 'list-decimal list-outside ml-6' : ''}`}>
-              {parsedListItems.map((item, idx) => (
-                <li key={idx} className={`${listType === 'bullet' ? 'flex items-start gap-4' : 'pl-2'} break-words`}>
-                  {listType === 'bullet' && <span className="text-[#C1603A] mt-1.5 shrink-0">•</span>}
-                  <span>{parseInline(item.title)}</span>
-                </li>
-              ))}
-            </Tag>
-          );
+        flushList();
+        let startNum = null;
+        if (listType === 'numbered') {
+          const match = lines[0].match(/^(\d+)\.\s/);
+          if (match) startNum = parseInt(match[1], 10);
         }
+        currentList = {
+          type: listType,
+          start: startNum,
+          items: parsedListItems
+        };
       }
       continue;
     }
@@ -299,6 +322,7 @@ export default function UniversalRenderer({ content }) {
     // 6. Metrics Grid Detection
     const possibleMetrics = lines.filter(l => isMetric(l));
     if (possibleMetrics.length === lines.length && lines.length > 1) {
+      flushList();
       renderedBlocks.push(
         <div key={i} className="my-10 grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
           {lines.map((metric, idx) => {
@@ -319,6 +343,7 @@ export default function UniversalRenderer({ content }) {
 
     // 7. Tech Stack plain list
     if (lines.length >= 3 && lines.every(l => l.length < 25 && !l.includes(' '))) {
+      flushList();
       renderedBlocks.push(
         <div key={i} className="my-8 flex flex-wrap gap-3">
           {lines.map((item, idx) => (
@@ -332,12 +357,15 @@ export default function UniversalRenderer({ content }) {
     }
 
     // 8. Default Paragraph
+    flushList();
     renderedBlocks.push(
       <p key={i} className="font-['Literata'] text-[#3C4A3E] text-xl md:text-2xl leading-[1.8] my-6 break-words">
         {parseInline(block.replace(/\n/g, ' '))}
       </p>
     );
   }
+
+  flushList();
 
   return <div className="universal-case-study-content w-full">{renderedBlocks}</div>;
 }
