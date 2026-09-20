@@ -35,6 +35,9 @@ export const viewport = {
 
 export const metadata = {
   metadataBase: new URL('https://shashank-gowda-nb-portfilo.vercel.app'),
+  alternates: {
+    canonical: 'https://shashank-gowda-nb-portfilo.vercel.app/',
+  },
   title: 'Shashank Gowda NB | AI Engineer & Full Stack Developer Bengaluru',
   description: 'Shashank Gowda NB – AI Engineer, Full Stack Developer & Systems Architect based in Bengaluru, India. Expert in building AI-powered apps, mobile apps, enterprise ERP systems, and high-performance full-stack web applications.',
   keywords: [
@@ -78,7 +81,7 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://shashank-gowda-nb-portfilo.vercel.app',
-    title: 'Shashank Gowda NB | AI Engineer & Systems Architect',
+    title: 'Shashank Gowda NB | AI Engineer & Full Stack Developer Bengaluru',
     description: 'Architecting Scalable Software & AI Ecosystems. Zero-latency distributed architectures, enterprise APIs, and production deep learning.',
     siteName: 'Shashank Gowda NB Systems Portfolio',
     images: [
@@ -92,7 +95,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Shashank Gowda NB | AI Engineer & Systems Architect',
+    title: 'Shashank Gowda NB | AI Engineer & Full Stack Developer Bengaluru',
     description: 'Architecting Scalable Software & AI Ecosystems. High-performance enterprise software and AI infrastructure.',
     images: ['/images/preview.png'],
   },
