@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { ExternalLink, Github, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
+import UniversalRenderer from '@/components/UniversalRenderer';
 
 export default function CaseStudyClient({ project, problemText, builtText, learnedText }) {
   const fadeUpVariant = {
@@ -99,36 +100,15 @@ export default function CaseStudyClient({ project, problemText, builtText, learn
 
       {/* Case Study Details */}
       <section className="px-6 py-12 md:py-24 max-w-5xl mx-auto border-t border-[#E7DFD5]">
-        <div className="space-y-24">
-          
-          <motion.div variants={fadeUpVariant} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
-            <h2 className="font-['Epilogue'] text-[#C1603A] text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-4">
-              <span className="w-8 h-[2px] bg-[#C1603A]"></span> The Challenge
-            </h2>
-            <p className="font-['Literata'] text-[#24211E] text-xl md:text-2xl leading-loose">
-              {problemText}
-            </p>
-          </motion.div>
-
-          <motion.div variants={fadeUpVariant} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
-            <h2 className="font-['Epilogue'] text-[#3C4A3E] text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-4">
-              <span className="w-8 h-[2px] bg-[#3C4A3E]"></span> Architecture & Execution
-            </h2>
-            <p className="font-['Literata'] text-[#24211E] text-xl md:text-2xl leading-loose">
-              {builtText}
-            </p>
-          </motion.div>
-
-          <motion.div variants={fadeUpVariant} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
-            <h2 className="font-['Epilogue'] text-[#3C4A3E] text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-4">
-              <span className="w-8 h-[2px] bg-[#3C4A3E]"></span> Business Impact
-            </h2>
-            <p className="font-['Literata'] text-[#24211E] text-xl md:text-2xl leading-loose">
-              {learnedText}
-            </p>
-          </motion.div>
-
-        </div>
+        <motion.div variants={fadeUpVariant} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-100px" }}>
+          <UniversalRenderer 
+            content={[
+              problemText && !/(challenge|problem|solution)/i.test(problemText) ? `## The Challenge\n\n${problemText}` : problemText,
+              builtText && !/(architecture|execution|built|tech)/i.test(builtText) ? `## Architecture & Execution\n\n${builtText}` : builtText,
+              learnedText && !/(impact|result|learn|outcome|conclusion)/i.test(learnedText) ? `## Business Impact\n\n${learnedText}` : learnedText
+            ].filter(Boolean).join('\n\n')} 
+          />
+        </motion.div>
       </section>
     </main>
   );
