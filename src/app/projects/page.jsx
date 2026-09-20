@@ -203,7 +203,7 @@ export default function ProjectsArchivePage() {
                     <div className="border-t-2 border-[#24211E] group-hover:border-[#FAF6F0]/20 transition-colors flex flex-wrap">
                       {hasCaseStudy(project) && (
                         <Link 
-                          href={`/projects/${project.id}`}
+                          href={`/projects/${project.slug || project.id}`}
                           className="flex-1 min-w-0 p-4 flex items-center justify-center gap-2 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E] group-hover:text-[#FAF6F0] border-r border-[#24211E]/20 group-hover:border-[#FAF6F0]/20 hover:bg-[#C1603A] hover:!text-[#FAF6F0] transition-colors"
                         >
                           <BookOpen className="w-3.5 h-3.5 shrink-0" />
@@ -235,7 +235,7 @@ export default function ProjectsArchivePage() {
                       {/* Fallback if project has nothing */}
                       {!hasCaseStudy(project) && (!project.live || project.live === '#') && (!project.code || project.code === '#') && (
                         <Link
-                          href={`/projects/${project.id}`}
+                          href={`/projects/${project.slug || project.id}`}
                           className="flex-1 p-4 flex items-center justify-center gap-2 font-['Epilogue'] text-xs font-bold uppercase tracking-widest text-[#24211E]/40 group-hover:text-[#FAF6F0]/40 transition-colors"
                         >
                           Coming Soon

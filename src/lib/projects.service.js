@@ -2,6 +2,20 @@ import { collection, getDocs, query, orderBy, doc, getDoc } from 'firebase/fires
 import { db } from './firebase';
 
 /**
+ * Converts a project title to a clean URL slug.
+ * e.g. "NTTF Community Hub Admin" -> "nttf-community-hub-admin"
+ */
+export function slugify(title = '') {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+/**
  * @typedef {Object} Project
  * @property {string} [id]
  * @property {string} title
@@ -138,6 +152,7 @@ export async function fetchProjects() {
 
       projects.push({
         id: doc.id,
+        slug: slugify(title),
         title: title,
         desc: data.desc || '',
         category: data.category || 'Engineering',
@@ -171,9 +186,11 @@ export async function fetchProjectById(id) {
 
     if (docSnap.exists()) {
       const data = docSnap.data();
+      const title = data.title || 'Untitled Project';
       return {
         id: docSnap.id,
-        title: data.title || 'Untitled Project',
+        slug: slugify(title),
+        title,
         desc: data.desc || '',
         category: data.category || 'Engineering',
         image: data.image || '/images/preview.png',
@@ -190,6 +207,27 @@ export async function fetchProjectById(id) {
     }
   } catch (error) {
     console.error('[FIRESTORE] Error fetching project by id:', error);
+    return null;
+  }
+}
+
+/**
+ * Fetch a single project by its URL slug (generated from the title).
+ * Falls back to searching all projects if direct ID lookup fails.
+ * @param {string} slug - e.g. "nttf-community-hub-admin"
+ * @returns {Promise<Project | null>}
+ */
+export async function fetchProjectBySlug(slug) {
+  try {
+    // First try direct ID lookup (for backward compatibility)
+    const byId = await fetchProjectById(slug);
+    if (byId) return byId;
+
+    // Otherwise search all projects and match by slug
+    const projects = await fetchProjects();
+    return projects.find(p => slugify(p.title) === slug) || null;
+  } catch (error) {
+    console.error('[FIRESTORE] Error fetching project by slug:', error);
     return null;
   }
 }

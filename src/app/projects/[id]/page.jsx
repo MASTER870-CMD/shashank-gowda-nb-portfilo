@@ -1,14 +1,14 @@
 import React from 'react';
-import { fetchProjectById } from '@/lib/projects.service';
+import { fetchProjectBySlug } from '@/lib/projects.service';
 import { notFound } from 'next/navigation';
 import CaseStudyClient from './CaseStudyClient';
 
 export async function generateMetadata({ params }) {
   const resolvedParams = await params;
-  const project = await fetchProjectById(resolvedParams.id);
+  const project = await fetchProjectBySlug(resolvedParams.id);
   if (!project) return { title: 'Not Found' };
   
-  const url = `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.id}`;
+  const url = `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.slug || resolvedParams.id}`;
   
   const keywords = [...(project.tech || []), project.category, 'Shashank Gowda NB', 'Systems Architecture', 'AI Engineering'].filter(Boolean).join(', ');
 
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }) {
 
 export default async function ProjectCaseStudy({ params }) {
   const resolvedParams = await params;
-  const project = await fetchProjectById(resolvedParams.id);
+  const project = await fetchProjectBySlug(resolvedParams.id);
 
   if (!project) {
     notFound();
@@ -79,7 +79,7 @@ export default async function ProjectCaseStudy({ params }) {
       price: '0',
       priceCurrency: 'USD',
     },
-    url: project.live && project.live !== '#' ? project.live : `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.id}`,
+    url: project.live && project.live !== '#' ? project.live : `https://shashank-gowda-nb-portfilo.vercel.app/projects/${project.slug || project.id}`,
     sameAs: project.code && project.code !== '#' ? [project.code] : [],
     datePublished: project.date || new Date().toISOString(),
     softwareRequirements: project.tech ? project.tech.join(', ') : 'Modern Browser'
